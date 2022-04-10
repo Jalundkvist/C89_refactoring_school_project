@@ -27,7 +27,7 @@ void init_serial(void)
 	}
 	
 	ENABLE_SERIAL_TRANSMISSION;
-	SET_BAUD_RATE_TO_115220_KBPS;
+	SET_BAUD_RATE_TO_9600_KBPS;
 	CARRIAGE_RETURN;
 	END_TRANSMISSION;
 	serial_initialized = true;

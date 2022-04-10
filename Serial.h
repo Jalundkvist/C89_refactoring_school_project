@@ -10,12 +10,12 @@
 * Channel Interrupt Enable 0) i kontrollregistret UCSR0B (USART Control and 
 * Status Register 0B). 
 * 
-* För att sätta bithastigheten / Baud Rate för seriell överföring till 115 220 
-* kbps (kilobits per second), så skrivs talet 7.67 till registret UBBR0 
+* För att sätta bithastigheten / Baud Rate för seriell överföring till 9600 
+* kbps (kilobits per second), så skrivs talet 103 till registret UBBR0 
 * (USART Baud Rate Register 0) enligt formeln
 *
-* UBRR0 = F_CPU / (16 * Baud Rate) - 1 = 16M / (16 * 115 220) - 1 = 8.67 - 1,
-* vilket avrundas till 7.67,
+* UBRR0 = F_CPU / (16 * Baud Rate) - 1 = 16M / (16 * 9600) - 1 = 104.16 - 1,
+* vilket avrundas till 103,
 *
 * där F_CPU är mikrodatorns klockfrekvens och Baud Rate är önskad bithastighet.
 *
@@ -38,7 +38,7 @@
 * till 5 tecken (inklusive nolltecken).
 ******************************************************************************/
 #define ENABLE_SERIAL_TRANSMISSION SET_BIT(UCSR0B, TXCIE0)
-#define SET_BAUD_RATE_TO_115220_KBPS UBRR0 = 7.67f
+#define SET_BAUD_RATE_TO_9600_KBPS UBRR0 = 103
 #define WAIT_FOR_PREVIOUS_TRANSMISSION_TO_FINISH while (READ_BIT(UCSR0A, UDRE0)) ;
 #define CARRIAGE_RETURN char r = '\r'; write_byte(&r)
 #define END_TRANSMISSION char e = '\0'; write_byte(&e)
