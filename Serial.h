@@ -37,7 +37,7 @@
 *
 * Vid behov av att deklarera en sträng, vilket sker då text skall sammansättas
 * med ett heltal, så används makrot SIZE för att sätta strängens kapacitet
-* till 5 tecken (inklusive nolltecken).
+* till 100 tecken (inklusive nolltecken).
 ******************************************************************************/
 #define ENABLE_SERIAL_TRANSMISSION UCSR0B = (1<<TXEN0)
 #define SET_BAUD_RATE_TO_9600_KBPS UBRR0 = 103
