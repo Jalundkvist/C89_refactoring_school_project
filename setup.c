@@ -20,6 +20,7 @@
 ******************************************************************************/
 void setup(void)
 {
+/*
 	unsigned char led1_PIN = 9;
 	unsigned char button_PIN = 13;
 	unsigned char temp_PIN = 1;
@@ -38,7 +39,7 @@ void setup(void)
 	timer1 = new_Timer(&timer1_selection, &timer1_delay);
 	Timer_on(timer1);
 	
-	tempSensor = new_TempSensor(&temp_PIN);
+	tempSensor = new_TempSensor(&temp_PIN);*/
 	
 	init_serial();
 	return;
