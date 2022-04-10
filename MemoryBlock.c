@@ -36,7 +36,7 @@ union MemoryBlock* new_MemoryBlock(void)
 * samtliga pekare till att peka på NULL, vilket innebär att de inte pekar på någon
 * specifik minnesadress.
 *************************************************************************************/
-void MemoryBlock_delete(union MemoryBlock* self, enum DataType* dataType)
+void MemoryBlock_delete(union MemoryBlock* self, DataType* dataType)
 {
 	if (*dataType == INT)
 	{
@@ -81,7 +81,7 @@ void MemoryBlock_delete(union MemoryBlock* self, enum DataType* dataType)
 * returneras true. Vid misslyckas minnesallokering, vilket indikeras genom att
 * pekaren copy inte pekar på någon minnesadress, så returneras i stället false.
 *************************************************************************************/
-bool MemoryBlock_resize(union MemoryBlock* self, enum DataType* dataType, size_t* new_size)
+bool MemoryBlock_resize(union MemoryBlock* self, DataType* dataType, size_t* new_size)
 {
 	if (*dataType == INT)
 	{
@@ -135,7 +135,7 @@ bool MemoryBlock_resize(union MemoryBlock* self, enum DataType* dataType, size_t
 * komma åt innehållet som data pekar på, där asterisken framför typomvandlingen
 * medför dereferensen.
 *************************************************************************************/
-void MemoryBlock_assign(union MemoryBlock* self, enum DataType* dataType, 
+void MemoryBlock_assign(union MemoryBlock* self, DataType* dataType, 
 						size_t* index, void* data)
 {
 	if (*dataType == INT)
@@ -174,7 +174,7 @@ void MemoryBlock_assign(union MemoryBlock* self, enum DataType* dataType,
 * data till en intpekare och sedan komma åt innehållet som denna pekar på ifall
 * aktuell datatyp är int. Samma princip används även för övriga datatyper.
 *************************************************************************************/
-void MemoryBlock_set(union MemoryBlock* self, enum DataType* dataType, 
+void MemoryBlock_set(union MemoryBlock* self, DataType* dataType, 
 					 size_t* index, void* data)
 {
 	if (*dataType == INT)
@@ -213,7 +213,7 @@ void MemoryBlock_set(union MemoryBlock* self, enum DataType* dataType,
 * följande operation genomföras:
 * int number = *(int*)(MemoryBlock_at(&data, INT, 5);
 *************************************************************************************/
-void* MemoryBlock_at(union MemoryBlock* self, enum DataType* dataType, size_t* index)
+void* MemoryBlock_at(union MemoryBlock* self, DataType* dataType, size_t* index)
 {
 	if (dataType == INT)
 	{
@@ -250,7 +250,7 @@ void* MemoryBlock_at(union MemoryBlock* self, enum DataType* dataType, size_t* i
 * serial_print, serial_print_integer samt serial_print_unsigned. Innen utskrift
 * påbörjas så initieras seriell överföring via anrop av funktionen init_serial.
 *************************************************************************************/
-void MemoryBlock_print(union MemoryBlock* self, enum DataType* dataType, size_t* size)
+void MemoryBlock_print(union MemoryBlock* self, DataType* dataType, size_t* size)
 {
 	if (!(*size)) return;
 	
@@ -324,7 +324,7 @@ void MemoryBlock_print(union MemoryBlock* self, enum DataType* dataType, size_t*
 * först typomvandla till en pekare av aktuell datatyp, följt av en dereferens för
 * att komma åt innehållet och tilldela detta till specicerat index i fältet.
 *************************************************************************************/
-void MemoryBlock_insert(union MemoryBlock* self, enum DataType* dataType, 
+void MemoryBlock_insert(union MemoryBlock* self, DataType* dataType, 
 						size_t* index, size_t* size, void* data)
 {
 	register size_t i;
@@ -390,7 +390,7 @@ void MemoryBlock_insert(union MemoryBlock* self, enum DataType* dataType,
 * mindre via anrop av funktionen MemoryBlock_resize, där det sista elementet i
 * arrayen raderas.
 *************************************************************************************/
-void MemoryBlock_erase(union MemoryBlock* self, enum DataType* dataType, 
+void MemoryBlock_erase(union MemoryBlock* self, DataType* dataType, 
 					   size_t* index, size_t* size)
 {
 	register size_t i;
@@ -444,7 +444,7 @@ void MemoryBlock_erase(union MemoryBlock* self, enum DataType* dataType,
 * variabeln temp skrivs till index j. Via likartade jämförelser och byten mellan
 * alla element så sorteras fältet.
 *************************************************************************************/
-void MemoryBlock_sort(union MemoryBlock* self, enum DataType* dataType, size_t* size)
+void MemoryBlock_sort(union MemoryBlock* self, DataType* dataType, size_t* size)
 {
 	register size_t i, j;
 	
@@ -529,7 +529,7 @@ void MemoryBlock_sort(union MemoryBlock* self, enum DataType* dataType, size_t* 
 * lagrat av variabeln temp skrivs till index j. Via likartade jämförelser och byten
 * mellan samtliga element så sorteras fältet.
 *************************************************************************************/
-void MemoryBlock_sort_reverse(union MemoryBlock* self, enum DataType* dataType, size_t* size)
+void MemoryBlock_sort_reverse(union MemoryBlock* self, DataType* dataType, size_t* size)
 {
 	register size_t i, j;
 	
