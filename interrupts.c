@@ -14,10 +14,10 @@
 ******************************************************************************/
 ISR (PCINT0_vect)
 {
-	Button_disable_interrupt(button);
+	button.disable_interrupt(&button);
 	Timer_on(timer0);
 	
-	if (Button_is_pressed(button))
+	if (button.is_pressed(&button))
 	{
 		Timer_clear(timer1);
 		print_temperature(tempSensor);		
@@ -42,7 +42,7 @@ ISR (TIMER0_OVF_vect)
 	if (Timer_elapsed(timer0))
 	{
 		Timer_off(timer0);
-		Button_enable_interrupt(button);	
+		button.enable_interrupt(&button);	
 	}
 	
 	return;

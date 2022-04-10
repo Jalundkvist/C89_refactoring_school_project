@@ -1,6 +1,10 @@
 /* Inkluderingsdirektiv: */
 #include "GPIO.h"
 
+static bool Button_is_pressed(struct Button* self);
+static void Button_enable_interrupt(struct Button* self);
+static void Button_disable_interrupt(struct Button* self);
+
 /******************************************************************************
 * Initieringsrutin för tryckknappar. * Ingående argument PIN utgör aktuellt 
 * PIN-nummer sett till Arduino Uno (PIN 0 - 13), som är ekvivalent med följande:
@@ -22,29 +26,26 @@
 * motsvarande bit i aktuellt PORT-register, vilket medför att tryckknappens
 * insignal alltid är hög eller låg (0 eller 1).
 ******************************************************************************/
-Button* new_Button(unsigned char* PIN)
+Button new_Button(uint8_t PIN)
 {
-	Button* self = (Button*)malloc(sizeof(Button));
-	if (!self)
+	Button self;
+	self.interrupt_enabled = false;
+	if (PIN >= 0 && PIN <= 7)
 	{
-		return NULL;
+		self.io_port = IO_PORTD;
+		self.PIN = PIN;
+		PORTD |= (1<< self.PIN);
 	}
 	
-	(*self).PIN = *PIN;
-	(*self).interrupt_enabled = false;
-	
-	if ((*self).PIN >= 0 && (*self).PIN <= 7)
+	else if (PIN >= 8 && PIN <= 13)
 	{
-		(*self).io_port = IO_PORTD;
-		SET_BIT(PORTD, (*self).PIN);
+		self.io_port = IO_PORTB;
+		self.PIN = PIN - 8;
+		PORTB |= (1<< self.PIN);
 	}
-	
-	else if ((*self).PIN >= 8 && (*self).PIN <= 13)
-	{
-		(*self).io_port = IO_PORTB;
-		SET_BIT(PORTB, (*self).PIN);
-	}
-	
+	self.is_pressed = Button_is_pressed;
+	self.enable_interrupt = Button_enable_interrupt;
+	self.disable_interrupt = Button_disable_interrupt;
 	return self;
 }
 
@@ -55,16 +56,16 @@ Button* new_Button(unsigned char* PIN)
 * tryckknappen är ansluten till I/O-port B, så läses motsvarande PIN från 
 * registret PIND och returneras. Annars vid fel så returneras false.
 ******************************************************************************/
-bool Button_is_pressed(Button* self)
+static bool Button_is_pressed(Button* self)
 {
-	if ((*self).io_port == IO_PORTB)
+	if (self->io_port == IO_PORTD)
 	{
-		return (READ_BIT(PINB, (*self).PIN));
+		return (PIND & (1<<self->PIN));
 	}
 	
-	else if ((*self).io_port == IO_PORTD)
+	else if (self->io_port == IO_PORTB)
 	{
-		return (READ_BIT(PIND, (*self).PIN));
+		return (PINB & (1<<self->PIN));
 	}
 	
 	return false;	
@@ -85,25 +86,24 @@ bool Button_is_pressed(Button* self)
 * Mask Register 2). Slutligen sätts instansvariabeln interrupt_enabled till
 * true för att indikera att abrott nu är aktiverat.
 ******************************************************************************/
-void Button_enable_interrupt(Button* self)
+static void Button_enable_interrupt(Button* self)
 {
-	if ((*self).io_port == IO_PORTB)
+	asm("SEI");
+	
+	if (self->io_port == IO_PORTB)
 	{
-		union Byte byte = new_Byte(PCICR);
-		byte.bits.bit0 = 1;
-		ASSIGN(PCICR, byte.data);
-		ASSIGN(PCMSK1, (*self).PIN);
+		PCICR |= (1<<PCIE0);
+		PCMSK0 |= (1<<self->PIN);
 	}
 	
-	else if ((*self).io_port == IO_PORTD)
+	else if (self->io_port == IO_PORTD)
 	{
-		union Byte byte = new_Byte(PCICR);
-		byte.bits.bit2 = 1;
-		ASSIGN(PCICR, byte.data);
-		ASSIGN(PCMSK2, (*self).PIN);
+		PCICR |= (1<<PCIE2);
+		PCMSK2 |= (1<<self->PIN);
 	}
 	
-	(*self).interrupt_enabled = true;
+	self->interrupt_enabled = true;
+	return;
 	return;
 }
 
@@ -113,22 +113,19 @@ void Button_enable_interrupt(Button* self)
 * nollställning av motsvarande bit i någon av registren PCMSK0 (I/O-port B)
 * eller PCMSK2 (I/O-port D).
 ******************************************************************************/
-void Button_disable_interrupt(Button* self)
+static void Button_disable_interrupt(Button* self)
 {
-	if ((*self).io_port == IO_PORTB)
+	if (self->io_port == IO_PORTD)
 	{
-		union Byte byte = new_Byte(PCMSK0);
-		byte.bits.bit0 = 0;
-		ASSIGN(PCMSK0, byte.data);
+		PCMSK2 &= ~(1<<self->PIN);
 	}
 	
-	else if ((*self).io_port == IO_PORTD)
+
+	else if(self->io_port == IO_PORTB)
 	{
-		union Byte byte = new_Byte(PCMSK2);
-		byte.bits.bit2 = 0;
-		ASSIGN(PCMSK2, byte.data);
+		PCMSK0 &= ~(1<<self->PIN);
 	}
 	
-	(*self).interrupt_enabled = false;
+	self->interrupt_enabled = false;
 	return;
 }

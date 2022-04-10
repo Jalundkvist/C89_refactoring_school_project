@@ -34,18 +34,16 @@ typedef struct Led
 ******************************************************************************/
 typedef struct Button
 {
-	unsigned char PIN; /* Aktuellt PIN-nummer. */
-	IO_port io_port; /* Använd I/O-port. */
-	bool interrupt_enabled; /* Indikerar ifall PCI-avbrott är aktiverat. */
+	unsigned char PIN;
+	IO_port io_port;
+	bool interrupt_enabled;
+	bool (*is_pressed)(struct Button*);
+	void (*enable_interrupt)(struct Button*);
+	void (*disable_interrupt)(struct Button*);
 } Button;
 
 /* Funktionsdeklarationer: */
 Led new_Led(uint8_t PIN); 
-
-Button* new_Button(unsigned char* PIN); 
-bool Button_is_pressed(struct Button* self);
-void Button_enable_interrupt(struct Button* self);
-void Button_disable_interrupt(struct Button* self);
-void delay(unsigned short* delay_time);
+Button new_Button(uint8_t PIN); 
 
 #endif /* GPIO_H_ */
