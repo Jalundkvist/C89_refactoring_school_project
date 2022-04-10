@@ -16,9 +16,9 @@
 #include <avr/interrupt.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <util/delay.h>
 
-#include "Byte.h" /* Headerfil för inkludering av union för enkel bithantering. */
+// Headerfil för inkludering av union för enkel bithantering. (borttagen då filen är inaktuell och ligger lagrad i mapp.
+//#include "Byte.h" 
 
 /******************************************************************************
 * För att aktivera avbrott globalt så ettställs I-flaggan (Interrupt Flag)
