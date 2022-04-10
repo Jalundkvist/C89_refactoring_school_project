@@ -21,7 +21,7 @@
 void setup(void)
 {
 
-	unsigned char led1_PIN = 9;
+	
 /*	unsigned char button_PIN = 13;
 	unsigned char temp_PIN = 1;
 	
@@ -31,7 +31,7 @@ void setup(void)
 	float timer0_delay = 300;
 	float timer1_delay = 500;
 	*/
-	led1 = new_Led(&led1_PIN);
+	led1 = new_Led(9);
 	/*button = new_Button(&button_PIN);
 	Button_enable_interrupt(button);
 	

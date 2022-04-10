@@ -7,14 +7,17 @@
 
 /******************************************************************************
 * Strukten Led används för implementering av lysdioder, som kan placeras på
-* någon av digitala PINs 0 - 13 på Arduino Uno. Varje lysdiod kan tändas, 
-* släckas och togglas.
+* någon av digitala PINs 0 - 13 på Arduino Uno. 
+* Varje lysdiod kan tändas, släckas och togglas.
 ******************************************************************************/
 typedef struct Led
 {
-	unsigned char PIN; /* Aktuellt PIN-nummer. */
-	bool enabled; /* Indikerar ifall lysdioden är på eller inte. */
-	IO_port io_port; /* I/O-port som lysdioden är ansluten till. */
+	uint8_t PIN;
+	bool enabled;
+	IO_port io_port;
+	void (*on)(struct Led* self);
+	void (*off)(struct Led* self);
+	void (*toggle)(struct Led* self);
 }Led;
 
 /******************************************************************************
@@ -25,9 +28,9 @@ typedef struct Led
 * 
 * Avbrottsvektorer gällande PCI-avbrott för respektive I/O-port är följande:
 *
-* I/O-port B (PIN 8 - 13): PCINT0_vect
+* I/O-port B (PIN 8 - 13):	PCINT0_vect
 * I/O-port C (PIN A0 - A5): PCINT1_vect - används dock inte för tryckknappar.
-* I/O-port D (PIN 0 - 7): PCINT2_vect
+* I/O-port D (PIN 0 - 7):	PCINT2_vect
 ******************************************************************************/
 typedef struct Button
 {
@@ -37,11 +40,8 @@ typedef struct Button
 } Button;
 
 /* Funktionsdeklarationer: */
-Led* new_Led(unsigned char* PIN); 
-void Led_on(struct Led* self);
-void Led_off(struct Led* self);
-void Led_toggle(struct Led* self);
-void Led_blink(struct Led* self, unsigned short* delay_time);
+Led new_Led(uint8_t PIN); 
+
 Button* new_Button(unsigned char* PIN); 
 bool Button_is_pressed(struct Button* self);
 void Button_enable_interrupt(struct Button* self);
