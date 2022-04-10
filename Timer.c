@@ -20,7 +20,7 @@
 * initierade objektet self, som är redo att användas för implementering av 
 * en given timerkrets.
 ******************************************************************************/
-struct Timer* new_Timer(enum TimerSelection* timerSelection, float* delay_time)
+struct Timer* new_Timer(TimerSelection* timerSelection, float* delay_time)
 {
 	struct Timer* self = (struct Timer*)malloc(sizeof(struct Timer));
 	
@@ -220,7 +220,7 @@ void Timer_set(struct Timer* self, float* delay_time)
 * därmed CTC Mode, där timern nollställs automatiskt vid uppräkning till
 * förvalt maxvärde, vilket i detta fall är 256.
 ******************************************************************************/
-void init_timer(enum TimerSelection* timerSelection)
+void init_timer(TimerSelection* timerSelection)
 {
 	if (*timerSelection == TIMER0) 
 	{
