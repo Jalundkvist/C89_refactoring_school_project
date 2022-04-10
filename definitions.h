@@ -2,7 +2,7 @@
 #ifndef DEFINITIONS_H_
 #define DEFINITIONS_H_
 
-#define F_CPU 160000000UL /* Sätter klockfrekvensen till 16 MHz. */
+#define F_CPU 16000000UL /* Sätter klockfrekvensen till 16 MHz. */
 
 /* Inkluderingsdirektiv: */
 #include <avr/io.h> /* Bibliotek för implementering av I/O gällande AVR-enheter. */
