@@ -28,6 +28,7 @@ void init_serial(void)
 	
 	ENABLE_SERIAL_TRANSMISSION;
 	SET_BAUD_RATE_TO_9600_KBPS;
+	SET_TRANSMISSION_SIZE;
 	CARRIAGE_RETURN;
 	END_TRANSMISSION;
 	serial_initialized = true;
@@ -80,8 +81,9 @@ void serial_print(char* s)
  void serial_print_integer(char* s, long* number)
 {
 	char text[SIZE];
-	sprintf(s, text, *number);
-	serial_print(s);
+	text[0] = '\0';
+	sprintf(text, s, *number);
+	serial_print(text);
 	return;
 }
 
@@ -99,8 +101,9 @@ void serial_print(char* s)
 void serial_print_unsigned(char* s, unsigned long* number)
 {	
 	char text[SIZE];
-	sprintf(s, text, *number);
-	serial_print(s);
+	text[0] = '\0';
+	sprintf(text, s, *number);
+	serial_print(text);
 	return;
 }
 
