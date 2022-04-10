@@ -14,7 +14,7 @@ struct Led
 {
 	unsigned char PIN; /* Aktuellt PIN-nummer. */
 	bool enabled; /* Indikerar ifall lysdioden är på eller inte. */
-	enum IO_port io_port; /* I/O-port som lysdioden är ansluten till. */
+	IO_port io_port; /* I/O-port som lysdioden är ansluten till. */
 };
 
 /******************************************************************************
@@ -32,7 +32,7 @@ struct Led
 struct Button
 {
 	unsigned char PIN; /* Aktuellt PIN-nummer. */
-	enum IO_port io_port; /* Använd I/O-port. */
+	IO_port io_port; /* Använd I/O-port. */
 	bool interrupt_enabled; /* Indikerar ifall PCI-avbrott är aktiverat. */
 };
 
