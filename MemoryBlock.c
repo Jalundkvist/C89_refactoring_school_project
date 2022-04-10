@@ -263,7 +263,7 @@ void MemoryBlock_print(union MemoryBlock* self, DataType* dataType, size_t* size
 		for (i = 0; i < *size; i++)
 		{
 			unsigned long character = (unsigned long)((*self).character[i]);
-			serial_print_unsigned("%c", &character);
+			serial_print_unsigned("%c", character);
 		}
 		
 		if ((*self).character[*size - 1] != '\n')
@@ -283,19 +283,19 @@ void MemoryBlock_print(union MemoryBlock* self, DataType* dataType, size_t* size
 		if (*dataType == INT)
 		{
 			long integer = (long)((*self).integer[i]);
-			serial_print_integer("%d\n", &integer);
+			serial_print_integer("%d\n", integer);
 		}
 		
 		else if (*dataType == DOUBLE)
 		{
 			long rounded_number = (long)((*self).decimal[i] + 0.5);
-			serial_print_integer("%g\n", &rounded_number);
+			serial_print_integer("%g\n", rounded_number);
 		}
 		
 		else if (*dataType == SIZE_T)
 		{
 			unsigned long number = (unsigned long)((*self).natural[i]);
-			serial_print_unsigned("%zu\n", &number);
+			serial_print_unsigned("%zu\n", number);
 		}
 	}
 

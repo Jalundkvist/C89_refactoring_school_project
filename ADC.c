@@ -51,7 +51,7 @@ void print_temperature(struct TempSensor* self)
 	ADC_read(&(*self).ADC_result);
 	Uin = VCC * ((*self).ADC_result / ADC_MAX);
 	(*self).temperature.rounded = (int)(100 * Uin - 50 + 0.5);
-	serial_print_integer("Temperature: %d degrees Celcius\n", &((*self).temperature.rounded));
+	serial_print_integer("Temperature: %d degrees Celcius\n", ((*self).temperature.rounded));
 	return;
 }
 
