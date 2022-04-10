@@ -1,4 +1,4 @@
-/* Inkluderingsdirektiv: */
+// Inkluderingsdirektiv:
 #include "GPIO.h"
 
 static void Led_on(Led* self);
@@ -16,12 +16,11 @@ static void Led_toggle(Led* self);
 *     8 - 13                    B            PIN på Arduino Uno - 8           *
 *******************************************************************************
 *
-* Först allokeras minne för ett nytt objekt av strukten Led som döps till self.
-* Om minnesallokeringen misslyckas så returneras NULL direkt. Annars initieras
-* objektets instansvariabler. Om aktuellt PIN-nummer ligger mellan 0 - 7, så 
-* är lysdioden ansluten till I/O-port D, vilket lagras via instansvariabeln 
-* io_port. Aktuellt PORT-nummer är då samma samma som PIN-numret, vilket 
-* lagras via instansvariabel PIN. Denna PIN sätts till utport genom att
+* Objektet lagras på den tillfälliga variabeln self. 
+* Om aktuellt PIN-nummer ligger mellan 0 - 7, så är lysdioden ansluten till 
+* I/O-port D, vilket lagras via instansvariabeln io_port.
+* Aktuellt PORT-nummer är då samma samma som PIN-numret, vilket lagras
+* via instansvariabel PIN. Denna PIN sätts till utport genom att
 * motsvarande bit i datariktningsregister DDRD (Data Direction Register D)
 * ettställs. Bitvis OR |= används för att enbart ettställa aktuell bit utan 
 * att påverka övriga bitar.
