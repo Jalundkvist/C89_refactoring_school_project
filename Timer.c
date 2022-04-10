@@ -20,9 +20,9 @@
 * initierade objektet self, som är redo att användas för implementering av 
 * en given timerkrets.
 ******************************************************************************/
-struct Timer* new_Timer(TimerSelection* timerSelection, float* delay_time)
+Timer* new_Timer(TimerSelection* timerSelection, float* delay_time)
 {
-	struct Timer* self = (struct Timer*)malloc(sizeof(struct Timer));
+	Timer* self = (Timer*)malloc(sizeof(Timer));
 	
 	if (!self) 
 	{
@@ -44,7 +44,7 @@ struct Timer* new_Timer(TimerSelection* timerSelection, float* delay_time)
 * aktiveras. Aktuell timerkrets aktiveras, följt av att medlemmen enabled 
 * sätts till true för att indikera att timern i fråga nu är aktiverad.
 ******************************************************************************/
-void Timer_on(struct Timer* self)
+void Timer_on(Timer* self)
 {
 	if ((*self).timerSelection == TIMER0) 
 	{
@@ -72,7 +72,7 @@ void Timer_on(struct Timer* self)
 * inaktiveras. Aktuell timerkrets inaktiveras, följt av att medlemmen enabled
 * sätts till false för att indikera att timern i fråga nu är inaktiverad.
 ******************************************************************************/
- void Timer_off(struct Timer* self)
+ void Timer_off(Timer* self)
 {
 	if ((*self).timerSelection == TIMER0)
 	{
@@ -102,7 +102,7 @@ void Timer_on(struct Timer* self)
 * för tillfället är inaktiverad (enabled är false), så stängs den av via 
 * funktionen Timer_on, som anropas via pekaren on.
 ******************************************************************************/
-void Timer_toggle(struct Timer* self)
+void Timer_toggle(Timer* self)
 {
 	if ((*self).enabled)
 	{
@@ -124,7 +124,7 @@ void Timer_toggle(struct Timer* self)
 * om timern är inaktiverad sker ingen uppräkning, så att timern inte av 
 * misstag skall löpa ut och orsaka avbrott när den är avstängd.
 ******************************************************************************/
-void Timer_count(struct Timer* self)
+void Timer_count(Timer* self)
 {
 	if ((*self).enabled)
 	{
@@ -149,7 +149,7 @@ void Timer_count(struct Timer* self)
 * har löpt ut. Annars om timern inte har löpt ut så returneras false utan att
 * timern nollställs. 
 ******************************************************************************/
-bool Timer_elapsed(struct Timer* self)
+bool Timer_elapsed(Timer* self)
 {
 	if ((*self).executed_interrupts >= (*self).required_interrupts)
 	{
@@ -165,7 +165,7 @@ bool Timer_elapsed(struct Timer* self)
 * argument self utgör en pekare till ett timerobjekt, vars medlem 
 * executed_interrupts nollställs för att därigenom nollställs timerkretsen.
 ******************************************************************************/
-void Timer_clear(struct Timer* self)
+void Timer_clear(Timer* self)
 {
 	(*self).executed_interrupts = 0x00;
 	return;
@@ -179,7 +179,7 @@ void Timer_clear(struct Timer* self)
 * exekverade avbrott för att nollställs timern, vilket sker via nollställning
 * av timerobjektets medlem executed_interrupts.
 ******************************************************************************/
-void Timer_reset(struct Timer* self)
+void Timer_reset(Timer* self)
 {
 	Timer_off(self);
 	(*self).executed_interrupts = 0x00;
@@ -194,7 +194,7 @@ void Timer_reset(struct Timer* self)
 * uppdateras via anrop av funktionen get_required_interrupts, där ingående
 * argument delay_time passeras som ingående argument.
 ******************************************************************************/
-void Timer_set(struct Timer* self, float* delay_time)
+void Timer_set(Timer* self, float* delay_time)
 {
 	(*self).required_interrupts = get_required_interrupts(delay_time);
 	return;

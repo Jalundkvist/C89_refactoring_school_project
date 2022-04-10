@@ -10,8 +10,8 @@
 #include "ADC.h"
 
 /* Globala variabler: */
-struct Led* led1; 
-struct Button* button; 
+Led led1; 
+Button* button; 
 struct Timer *timer0, *timer1; 
 struct TempSensor* tempSensor;
 

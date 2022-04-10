@@ -21,7 +21,7 @@ ISR (PCINT0_vect)
 	{
 		Timer_clear(timer1);
 		print_temperature(tempSensor);		
-		Led_toggle(led1);	
+		led1.toggle(&led1);	
 	}
 	
 	return;
@@ -64,7 +64,7 @@ ISR (TIMER1_COMPA_vect)
 	if (Timer_elapsed(timer1))
 	{
 		print_temperature(tempSensor);
-		Led_toggle(led1);
+		led1.toggle(&led1);
 	}
 	return;
 }

@@ -9,9 +9,9 @@
 * initieras objektets instansvariabler, följt av att det initierade objektet
 * returneras.
 ******************************************************************************/
-struct TempSensor* new_TempSensor(unsigned char* PIN)
+TempSensor* new_TempSensor(unsigned char* PIN)
 {
-	struct TempSensor* self = (struct TempSensor*)malloc(sizeof(struct TempSensor));
+	TempSensor* self = (TempSensor*)malloc(sizeof(TempSensor));
 	
 	if (!self)
 	{
@@ -45,7 +45,7 @@ struct TempSensor* new_TempSensor(unsigned char* PIN)
 * "Temperature: %d degrees", där %d är formatspecificerare för heltal och 
 * ersätts med avläst rumstemperatur.
 ******************************************************************************/
-void print_temperature(struct TempSensor* self)
+void print_temperature(TempSensor* self)
 {
 	float Uin;
 	ADC_read(&(*self).ADC_result);

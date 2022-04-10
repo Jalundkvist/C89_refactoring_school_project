@@ -1,6 +1,10 @@
 /* Inkluderingsdirektiv: */
 #include "GPIO.h"
 
+static void Led_on(Led* self);
+static void Led_off(Led* self);
+static void Led_toggle(Led* self);
+
 /******************************************************************************
 * Funktionen new_Led utgör initieringsrutin för objekt av strukten Led.
 * Ingående argument PIN utgör aktuellt PIN-nummer sett till Arduino Uno
@@ -29,33 +33,29 @@
 * (Data Direction Register B).
 *
 * Slutligen sätts pekarna till att peka på motsvarande funktioner, följt
-* av att det nu initierade objektet returneras. Kom ihåg: self.on = Led_on
-* betyder att pekaren on pekar på funktionen Led_on.
+* av att det nu initierade objektet returneras.
 ******************************************************************************/
-struct Led* new_Led(unsigned char* PIN)
+Led new_Led(uint8_t PIN)
 {
-	struct Led* self = (struct Led*)malloc(sizeof(struct Led));
+	Led self;
+	self.enabled = false;
+	self.PIN = PIN;
 	
-	if (!self)
+	if (self.PIN >= 0 && self.PIN <= 7) 
 	{
-		return NULL;
+		self.io_port = IO_PORTD;
+		DDRD |= (1 << self.PIN);
 	}
 	
-	(*self).PIN = *PIN;
-	(*self).enabled = false; 
-	
-	if ((*self).PIN >= 0 && (*self).PIN <= 7) 
+	else if (self.PIN >= 8 && self.PIN <= 13)
 	{
-		(*self).io_port = IO_PORTD;
-		ASSIGN(DDRD, (*self).PIN);
+		self.PIN = PIN - 8;
+		self.io_port = IO_PORTB;
+		DDRB |= (1 << self.PIN);
 	}
-	
-	else if ((*self).PIN >= 8 && (*self).PIN <= 13)
-	{
-		(*self).io_port = IO_PORTB;
-		ASSIGN(DDRB, (*self).PIN);
-	}
-	
+	self.on = Led_on;
+	self.off = Led_off;
+	self.toggle = Led_toggle;
 	 return self;
 }
 
@@ -64,19 +64,19 @@ struct Led* new_Led(unsigned char* PIN)
 * utgör en pekare till led-objektet i fråga. Utefter aktuell I/O-port så 
 * ettställs motsvarande bit i register PORTB eller PORTD.
 ******************************************************************************/
-void Led_on(struct Led* self)
+void Led_on(Led* self)
 {
-	if ((*self).io_port == IO_PORTB)
+	if (self->io_port == IO_PORTB)
 	{
-		SET_BIT(PORTB, (*self).PIN);
+		PORTB |=  (1 << self->PIN);
 	}
 	
-	else if ((*self).io_port == IO_PORTD)
+	else if (self->io_port == IO_PORTD)
 	{
-		SET_BIT(PORTD, (*self).PIN);
+		PORTD |= (1 << self->PIN);
 	}
 	
-	(*self).enabled = true;
+	self->enabled = true;
 	return;	
 }
 
@@ -85,19 +85,19 @@ void Led_on(struct Led* self)
 * self utgör en pekare till lysdioden. Utefter aktuell I/O-port så nollställs
 * motsvarande bit i register PORTB eller PORTD.
 ******************************************************************************/
- void Led_off(struct Led* self)
+void Led_off(Led* self)
 {
-	if ((*self).io_port == IO_PORTB)
+	if (self->io_port == IO_PORTB)
 	{
-		CLEAR_BIT(PORTB, (*self).PIN);
+		PORTB &= ~(1<<self->PIN);
 	}
 	
-	else if ((*self).io_port == IO_PORTD)
+	else if (self->io_port == IO_PORTD)
 	{
-		CLEAR_BIT(PORTD, (*self).PIN);
+		PORTD &= ~(1<<self->PIN);
 	}
 	
-	(*self).enabled = false;
+	self->enabled = false;
 	return;
 }
 
@@ -107,16 +107,16 @@ void Led_on(struct Led* self)
 * och då släcks lysdioden via anrop av funktionen Led_off (via pekaren off).
 * Annars så tänds lysdioden via anrop av funktionen Led_on (via pekaren on).
 ******************************************************************************/
-void Led_toggle(struct Led* self)
+void Led_toggle(Led* self)
 {
-	if ((*self).enabled)
+	if (self->enabled)
 	{
-		Led_off(self);
+		self->off(self);
 	}
 	
 	else
 	{
-		Led_on(self);
+		self->on(self);
 	}
 	
 	return;

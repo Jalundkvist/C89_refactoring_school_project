@@ -22,9 +22,9 @@
 * motsvarande bit i aktuellt PORT-register, vilket medför att tryckknappens
 * insignal alltid är hög eller låg (0 eller 1).
 ******************************************************************************/
-struct Button* new_Button(unsigned char* PIN)
+Button* new_Button(unsigned char* PIN)
 {
-	struct Button* self = (struct Button*)malloc(sizeof(struct Button));
+	Button* self = (Button*)malloc(sizeof(Button));
 	if (!self)
 	{
 		return NULL;
@@ -55,7 +55,7 @@ struct Button* new_Button(unsigned char* PIN)
 * tryckknappen är ansluten till I/O-port B, så läses motsvarande PIN från 
 * registret PIND och returneras. Annars vid fel så returneras false.
 ******************************************************************************/
-bool Button_is_pressed(struct Button* self)
+bool Button_is_pressed(Button* self)
 {
 	if ((*self).io_port == IO_PORTB)
 	{
@@ -85,7 +85,7 @@ bool Button_is_pressed(struct Button* self)
 * Mask Register 2). Slutligen sätts instansvariabeln interrupt_enabled till
 * true för att indikera att abrott nu är aktiverat.
 ******************************************************************************/
-void Button_enable_interrupt(struct Button* self)
+void Button_enable_interrupt(Button* self)
 {
 	if ((*self).io_port == IO_PORTB)
 	{
@@ -113,7 +113,7 @@ void Button_enable_interrupt(struct Button* self)
 * nollställning av motsvarande bit i någon av registren PCMSK0 (I/O-port B)
 * eller PCMSK2 (I/O-port D).
 ******************************************************************************/
-void Button_disable_interrupt(struct Button* self)
+void Button_disable_interrupt(Button* self)
 {
 	if ((*self).io_port == IO_PORTB)
 	{
