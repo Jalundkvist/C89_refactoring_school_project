@@ -6,9 +6,8 @@
 #include "definitions.h"
 
 /******************************************************************************
-* För att aktivera seriell transmission så ettställs biten TXCIE0 (Transfer 
-* Channel Interrupt Enable 0) i kontrollregistret UCSR0B (USART Control and 
-* Status Register 0B). 
+* För att aktivera seriell transmission så ettställs biten TXEN0 (Transfer 
+* Enable 0) i kontrollregistret UCSR0B (USART Control and Status Register 0B). 
 * 
 * För att sätta bithastigheten / Baud Rate för seriell överföring till 9600 
 * kbps (kilobits per second), så skrivs talet 103 till registret UBBR0 
@@ -18,6 +17,9 @@
 * vilket avrundas till 103,
 *
 * där F_CPU är mikrodatorns klockfrekvens och Baud Rate är önskad bithastighet.
+*
+* För att ställa in 8-bitars överföring ettställs bitarna UCSZ01 och UCSZ00 
+* i  kontrollregistret UCSR0C (USART Control and Status Register 0C).
 *
 * För att vänta tills eventuellt föregående tecken har transmitterats, så
 * implementeras en while-sats, som exekverar så länge dataregistret UDR0
@@ -37,12 +39,14 @@
 * med ett heltal, så används makrot SIZE för att sätta strängens kapacitet
 * till 5 tecken (inklusive nolltecken).
 ******************************************************************************/
-#define ENABLE_SERIAL_TRANSMISSION SET_BIT(UCSR0B, TXCIE0)
+#define ENABLE_SERIAL_TRANSMISSION UCSR0B = (1<<TXEN0)
 #define SET_BAUD_RATE_TO_9600_KBPS UBRR0 = 103
-#define WAIT_FOR_PREVIOUS_TRANSMISSION_TO_FINISH while (READ_BIT(UCSR0A, UDRE0)) ;
+#define SET_TRANSMISSION_SIZE UCSR0C = (1<<UCSZ01)|(1<<UCSZ00)
+#define WAIT_FOR_PREVIOUS_TRANSMISSION_TO_FINISH while ((UCSR0A &(1<<UDRE0)) == 0)
 #define CARRIAGE_RETURN char r = '\r'; write_byte(&r)
 #define END_TRANSMISSION char e = '\0'; write_byte(&e)
-#define SIZE 5
+#define SIZE 100
+// Strängens kapacititet innan var innan 5.
 
 /* Funktionsdeklarationer: */
 void init_serial(void);
