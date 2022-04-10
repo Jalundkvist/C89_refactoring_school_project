@@ -81,7 +81,7 @@ void MemoryBlock_delete(union MemoryBlock* self, enum DataType* dataType)
 * returneras true. Vid misslyckas minnesallokering, vilket indikeras genom att
 * pekaren copy inte pekar på någon minnesadress, så returneras i stället false.
 *************************************************************************************/
-enum bool MemoryBlock_resize(union MemoryBlock* self, enum DataType* dataType, size_t* new_size)
+bool MemoryBlock_resize(union MemoryBlock* self, enum DataType* dataType, size_t* new_size)
 {
 	if (*dataType == INT)
 	{

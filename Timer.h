@@ -86,7 +86,7 @@
 ******************************************************************************/
 struct Timer
 {
-	enum bool enabled; /* Indikerar ifall timern är aktiverad. */
+	bool enabled; /* Indikerar ifall timern är aktiverad. */
 	enum TimerSelection timerSelection; /* Använd timerkrets. */
 	unsigned long executed_interrupts; /* Antalet avbrott som har ägt rum. */
 	unsigned long required_interrupts; /* Antalet avbrott som krävs för aktuell fördröjning. */
@@ -98,7 +98,7 @@ void Timer_on(struct Timer* self);
 void Timer_off(struct Timer* self);
 void Timer_toggle(struct Timer* self);
 void Timer_count(struct Timer* self);
-enum bool Timer_elapsed(struct Timer* self);
+bool Timer_elapsed(struct Timer* self);
 void Timer_clear(struct Timer* self);
 void Timer_reset(struct Timer* self);
 void Timer_set(struct Timer* self, float* delay_time);

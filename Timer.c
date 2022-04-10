@@ -149,7 +149,7 @@ void Timer_count(struct Timer* self)
 * har löpt ut. Annars om timern inte har löpt ut så returneras false utan att
 * timern nollställs. 
 ******************************************************************************/
-enum bool Timer_elapsed(struct Timer* self)
+bool Timer_elapsed(struct Timer* self)
 {
 	if ((*self).executed_interrupts >= (*self).required_interrupts)
 	{

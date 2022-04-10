@@ -19,7 +19,7 @@
  ******************************************************************************/
 void init_serial(void)
 {
-	static enum bool serial_initialized = false; 
+	static bool serial_initialized = false; 
 	
 	if (serial_initialized)
 	{

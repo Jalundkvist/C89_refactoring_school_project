@@ -21,7 +21,7 @@ union MemoryBlock
 /* Externa funktioner: */
 union MemoryBlock* new_MemoryBlock(void);
 void MemoryBlock_delete(union MemoryBlock* self, enum DataType* dataType);
-enum bool MemoryBlock_resize(union MemoryBlock* self, enum DataType* dataType, size_t* new_size);
+bool MemoryBlock_resize(union MemoryBlock* self, enum DataType* dataType, size_t* new_size);
 void MemoryBlock_assign(union MemoryBlock* self, enum DataType* dataType, 
 						size_t* index, void* data);
 void MemoryBlock_set(union MemoryBlock* self, enum DataType* dataType, 

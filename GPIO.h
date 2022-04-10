@@ -13,7 +13,7 @@
 struct Led
 {
 	unsigned char PIN; /* Aktuellt PIN-nummer. */
-	enum bool enabled; /* Indikerar ifall lysdioden är på eller inte. */
+	bool enabled; /* Indikerar ifall lysdioden är på eller inte. */
 	enum IO_port io_port; /* I/O-port som lysdioden är ansluten till. */
 };
 
@@ -33,7 +33,7 @@ struct Button
 {
 	unsigned char PIN; /* Aktuellt PIN-nummer. */
 	enum IO_port io_port; /* Använd I/O-port. */
-	enum bool interrupt_enabled; /* Indikerar ifall PCI-avbrott är aktiverat. */
+	bool interrupt_enabled; /* Indikerar ifall PCI-avbrott är aktiverat. */
 };
 
 /* Funktionsdeklarationer: */
@@ -43,7 +43,7 @@ void Led_off(struct Led* self);
 void Led_toggle(struct Led* self);
 void Led_blink(struct Led* self, unsigned short* delay_time);
 struct Button* new_Button(unsigned char* PIN); 
-enum bool Button_is_pressed(struct Button* self);
+bool Button_is_pressed(struct Button* self);
 void Button_enable_interrupt(struct Button* self);
 void Button_disable_interrupt(struct Button* self);
 void delay(unsigned short* delay_time);

@@ -33,7 +33,7 @@
 #define CLEAR(REGISTER) REGISTER = 0x00 /* Nollställer samtliga bitar i register. */
 
 /* Typdefinitioner: */
-enum bool { false, true }; /* Realiserar datatypen bool. */
+typedef enum { false, true } bool; /* Realiserar datatypen bool. */
 enum IO_port { IO_PORTB, IO_PORTC, IO_PORTD }; /* Enumeration för I/O-portar. */
 enum TimerSelection { TIMER0, TIMER1, TIMER2 }; /* Enumeration för timerkretsar. */
 enum DataType { INT, DOUBLE, SIZE_T, CHAR }; /* Val av datatyp för vektor. */
