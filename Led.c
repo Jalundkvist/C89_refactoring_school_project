@@ -32,9 +32,9 @@
 * av att det nu initierade objektet returneras. Kom ihåg: self.on = Led_on
 * betyder att pekaren on pekar på funktionen Led_on.
 ******************************************************************************/
-struct Led* new_Led(unsigned char* PIN)
+Led* new_Led(unsigned char* PIN)
 {
-	struct Led* self = (struct Led*)malloc(sizeof(struct Led));
+	Led* self = (Led*)malloc(sizeof(Led));
 	
 	if (!self)
 	{
@@ -64,7 +64,7 @@ struct Led* new_Led(unsigned char* PIN)
 * utgör en pekare till led-objektet i fråga. Utefter aktuell I/O-port så 
 * ettställs motsvarande bit i register PORTB eller PORTD.
 ******************************************************************************/
-void Led_on(struct Led* self)
+void Led_on(Led* self)
 {
 	if ((*self).io_port == IO_PORTB)
 	{
@@ -85,7 +85,7 @@ void Led_on(struct Led* self)
 * self utgör en pekare till lysdioden. Utefter aktuell I/O-port så nollställs
 * motsvarande bit i register PORTB eller PORTD.
 ******************************************************************************/
- void Led_off(struct Led* self)
+ void Led_off(Led* self)
 {
 	if ((*self).io_port == IO_PORTB)
 	{
@@ -107,7 +107,7 @@ void Led_on(struct Led* self)
 * och då släcks lysdioden via anrop av funktionen Led_off (via pekaren off).
 * Annars så tänds lysdioden via anrop av funktionen Led_on (via pekaren on).
 ******************************************************************************/
-void Led_toggle(struct Led* self)
+void Led_toggle(Led* self)
 {
 	if ((*self).enabled)
 	{

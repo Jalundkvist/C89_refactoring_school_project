@@ -51,15 +51,15 @@ union Temperature
 * Strukten TempSensor används för implementering av en temperatursensor
 * ansluten till en given analog PIN A0 - A5. 
 ******************************************************************************/
-struct TempSensor
+typedef struct TempSensor
 {
 	unsigned char PIN; /* PIN-nummer för avläsning. */
 	unsigned short ADC_result; /* Lagring av resultat från AD-omvandling. */
 	union Temperature temperature; /* Aktuell rumstemperatur. */
-};
+} TempSensor;
 
 /* Funktionsdeklarationer: */
-struct TempSensor* new_TempSensor(unsigned char* PIN);
+TempSensor* new_TempSensor(unsigned char* PIN);
 void print_temperature(struct TempSensor* self);
 void ADC_read(unsigned short* ADC_result);
 

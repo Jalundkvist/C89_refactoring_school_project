@@ -84,16 +84,16 @@
 * Timer 1: TIMER1_COMPA_vect - CTC Mode, maxvärde för uppräkning satt till 256.
 * Timer 2: TIMER2_OVF_vect - Normal Mode.
 ******************************************************************************/
-struct Timer
+typedef struct Timer
 {
 	bool enabled; /* Indikerar ifall timern är aktiverad. */
 	TimerSelection timerSelection; /* Använd timerkrets. */
 	unsigned long executed_interrupts; /* Antalet avbrott som har ägt rum. */
 	unsigned long required_interrupts; /* Antalet avbrott som krävs för aktuell fördröjning. */
-};
+} Timer;
 
 /* Funktionsdeklarationer: */
-struct Timer* new_Timer(TimerSelection* timerSelection, float* delay_time);
+Timer* new_Timer(TimerSelection* timerSelection, float* delay_time);
 void Timer_on(struct Timer* self);
 void Timer_off(struct Timer* self);
 void Timer_toggle(struct Timer* self);

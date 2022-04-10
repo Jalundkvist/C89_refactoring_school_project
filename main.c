@@ -10,10 +10,9 @@
 int main(void)
 {	
 	setup();
-    while (true);
+    while (true)
 	{
 		
 	}
 	return 0;
 }
-
