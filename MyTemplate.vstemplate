@@ -1,0 +1,39 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>Project 1</Name>
+    <Description>&lt;No description available&gt;</Description>
+    <ProjectType>CandCPP</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>Project 1</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="Project 1.cproj" File="Project 1.cproj" ReplaceParameters="true">
+      <Folder Name="libm" TargetFolderName="libm" />
+      <ProjectItem ReplaceParameters="true" TargetFileName="ADC.c">ADC.c</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ADC.h">ADC.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Button.c">Button.c</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Byte.c">Byte.c</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Byte.h">Byte.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="definitions.h">definitions.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="GPIO.h">GPIO.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="header.h">header.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="interrupts.c">interrupts.c</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Led.c">Led.c</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="main.c">main.c</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="MemoryBlock.c">MemoryBlock.c</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="MemoryBlock.h">MemoryBlock.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Serial.c">Serial.c</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Serial.h">Serial.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="setup.c">setup.c</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Timer.c">Timer.c</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Timer.h">Timer.h</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>
