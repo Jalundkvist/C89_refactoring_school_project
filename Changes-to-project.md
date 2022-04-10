@@ -14,5 +14,23 @@ Dokumentation av ändringar i projektet
       Increases the capacity of string from "4 + \0" to "99 + \0". Fixed
       
       Serial_print now working, integer and unsigned not working.
+      
   2.5 Macro SET_TRANSMISSION_SIZE added to set size of transmission.
+  2.6 Improper use of sprintf function in print_integer and unsigned function.
+      Functions now prints properly, first variable in sprintf should be empty string.
   
+      serial_print_integer & serial_print_unsigned now working.
+  2.7 Check if pointers is necessary in serial, if not. - remove unecessary pointers.
+    2.7.1 write_byte no longer uses pointer. Uses one bit of data/send
+    2.7.2 Macro update -> CARRIAGE_RETURN & END_TRANSMISSION
+    2.7.3 Removed pointers from print_integer and print_unsigned. 
+          updated long & unsigned long to int32_t & uint32_t.
+          
+       Serial is now updated now works as intended, review comments later.
+    
+  
+  3. enum to typedef enum -> to avoid repeating use of word "enum". Removed the use of word "enum" in all files except for typedef enum.
+    3.1 enum bool fixed to typedef enum
+    3.2 enum IO_port fixed to typedef enum
+    3.3 enum TimerSelection fixed to typedef enum
+    3.4 enum DataType fixed to typedef enum
