@@ -13,13 +13,13 @@
  * vilket indikerar att seriell överföring redan har initierats, så avslutas 
  * funktionen direkt. Annars aktiveras seriell transmission för asynkron 
  * överföring av en byte (motsvarar ett tecken) i taget med en bithastighet 
- * på 115 220 kbps. För att första transmitterade utskrift skall hamna längst
+ * på 9600 kbps. För att första transmitterade utskrift skall hamna längst
  * till vänster på den första raden så transmitteras ett vagnreturstecken \r, 
  * följt av ett nolltecken \0 för att indikera att transmissionen är slutförd.
  ******************************************************************************/
 void init_serial(void)
 {
-	static enum bool serial_initialized = false; 
+	static bool serial_initialized = false; 
 	
 	if (serial_initialized)
 	{
@@ -47,19 +47,14 @@ void init_serial(void)
 ******************************************************************************/
 void serial_print(char* s)
 {
-	unsigned long i = 0;
-		
-	loop:
-		if (s[i])
+	for (uint16_t i = 0; s[i] != '\0'; i++)
 		{
-			write_byte(&s[i]);
+			write_byte(s[i]);
 			
-			if (s[i++] == '\n')
+			if (s[i] == '\n')
 			{
 				CARRIAGE_RETURN;
 			}
-				
-			goto loop;
 		}
 	
 	END_TRANSMISSION;
@@ -78,11 +73,11 @@ void serial_print(char* s)
 * strängen text, passeras sedan som ingående argument vid anrop av funktionen 
 * serial_print för transmission.
 ******************************************************************************/
- void serial_print_integer(char* s, long* number)
+ void serial_print_integer(char* s, int32_t number)
 {
 	char text[SIZE];
 	text[0] = '\0';
-	sprintf(text, s, *number);
+	sprintf(text, s, number);
 	serial_print(text);
 	return;
 }
@@ -98,11 +93,11 @@ void serial_print(char* s)
 * text, passeras sedan som ingående argument vid anrop av funktionen 
 * serial_print för transmission.
 ******************************************************************************/
-void serial_print_unsigned(char* s, unsigned long* number)
+void serial_print_unsigned(char* s, uint32_t number)
 {	
 	char text[SIZE];
 	text[0] = '\0';
-	sprintf(text, s, *number);
+	sprintf(text, s, number);
 	serial_print(text);
 	return;
 }
@@ -115,9 +110,9 @@ void serial_print_unsigned(char* s, unsigned long* number)
 * Så fort detta register är tomt så placeras det nya tecknet data i detta
 * register för transmission. 
 ******************************************************************************/
-void write_byte(char* data)
+void write_byte(char data)
 {
 	WAIT_FOR_PREVIOUS_TRANSMISSION_TO_FINISH;
-	UDR0 = *data;
+	UDR0 = data;
 	return;
 }

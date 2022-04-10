@@ -37,22 +37,22 @@
 *
 * Vid behov av att deklarera en sträng, vilket sker då text skall sammansättas
 * med ett heltal, så används makrot SIZE för att sätta strängens kapacitet
-* till 5 tecken (inklusive nolltecken).
+* till 100 tecken (inklusive nolltecken).
 ******************************************************************************/
 #define ENABLE_SERIAL_TRANSMISSION UCSR0B = (1<<TXEN0)
 #define SET_BAUD_RATE_TO_9600_KBPS UBRR0 = 103
 #define SET_TRANSMISSION_SIZE UCSR0C = (1<<UCSZ01)|(1<<UCSZ00)
 #define WAIT_FOR_PREVIOUS_TRANSMISSION_TO_FINISH while ((UCSR0A &(1<<UDRE0)) == 0)
-#define CARRIAGE_RETURN char r = '\r'; write_byte(&r)
-#define END_TRANSMISSION char e = '\0'; write_byte(&e)
+#define CARRIAGE_RETURN write_byte('\r')
+#define END_TRANSMISSION write_byte('\0')
 #define SIZE 100
 // Strängens kapacititet innan var innan 5.
 
 /* Funktionsdeklarationer: */
 void init_serial(void);
 void serial_print(char* s);
-void serial_print_integer(char* s, long* number);
-void serial_print_unsigned(char* s, unsigned long* number);
-void write_byte(char* data);
+void serial_print_integer(char* s, int32_t number);
+void serial_print_unsigned(char* s, uint32_t number);
+void write_byte(char data);
 
 #endif /* SERIAL_H_ */

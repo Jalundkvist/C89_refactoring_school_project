@@ -55,7 +55,7 @@ struct Button* new_Button(unsigned char* PIN)
 * tryckknappen är ansluten till I/O-port B, så läses motsvarande PIN från 
 * registret PIND och returneras. Annars vid fel så returneras false.
 ******************************************************************************/
-enum bool Button_is_pressed(struct Button* self)
+bool Button_is_pressed(struct Button* self)
 {
 	if ((*self).io_port == IO_PORTB)
 	{

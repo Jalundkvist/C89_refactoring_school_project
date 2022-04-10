@@ -4,11 +4,20 @@
 
 #define F_CPU 16000000UL /* Sätter klockfrekvensen till 16 MHz. */
 
-/* Inkluderingsdirektiv: */
-#include <avr/io.h> /* Bibliotek för implementering av I/O gällande AVR-enheter. */
-#include <avr/interrupt.h> /* Bibliotek för avbrott. */
-#include <stdio.h> /* Bibliotek för implementering av I/O i C. */
-#include <stdlib.h> /* C:s standardbibliotek. */
+/******************************************************************************
+* Inkluderingsdirektiv:
+* <avr/io.h> Bibliotek för implementering av I/O gällande AVR-enheter.
+* <avr/interrupt.h> Bibliotek för avbrott.
+* <stdio.h> Bibliotek för implementering av I/O i C.
+* <stdlib.h> C:s standardbibliotek.
+* <util/delay.h> Bibliotek för att generera fördröjning.
+******************************************************************************/
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <util/delay.h>
+
 #include "Byte.h" /* Headerfil för inkludering av union för enkel bithantering. */
 
 /******************************************************************************
@@ -33,9 +42,9 @@
 #define CLEAR(REGISTER) REGISTER = 0x00 /* Nollställer samtliga bitar i register. */
 
 /* Typdefinitioner: */
-enum bool { false, true }; /* Realiserar datatypen bool. */
-enum IO_port { IO_PORTB, IO_PORTC, IO_PORTD }; /* Enumeration för I/O-portar. */
-enum TimerSelection { TIMER0, TIMER1, TIMER2 }; /* Enumeration för timerkretsar. */
-enum DataType { INT, DOUBLE, SIZE_T, CHAR }; /* Val av datatyp för vektor. */
+typedef enum { false, true } bool; /* Realiserar datatypen bool. */
+typedef enum { IO_PORTB, IO_PORTC, IO_PORTD } IO_port; /* Enumeration för I/O-portar. */
+typedef enum { TIMER0, TIMER1, TIMER2 } TimerSelection; /* Enumeration för timerkretsar. */
+typedef enum { INT, DOUBLE, SIZE_T, CHAR } DataType; /* Val av datatyp för vektor. */
 
 #endif /* DEFINITIONS_H_ */

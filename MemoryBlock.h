@@ -20,19 +20,19 @@ union MemoryBlock
 
 /* Externa funktioner: */
 union MemoryBlock* new_MemoryBlock(void);
-void MemoryBlock_delete(union MemoryBlock* self, enum DataType* dataType);
-enum bool MemoryBlock_resize(union MemoryBlock* self, enum DataType* dataType, size_t* new_size);
-void MemoryBlock_assign(union MemoryBlock* self, enum DataType* dataType, 
+void MemoryBlock_delete(union MemoryBlock* self, DataType* dataType);
+bool MemoryBlock_resize(union MemoryBlock* self, DataType* dataType, size_t* new_size);
+void MemoryBlock_assign(union MemoryBlock* self, DataType* dataType, 
 						size_t* index, void* data);
-void MemoryBlock_set(union MemoryBlock* self, enum DataType* dataType, 
+void MemoryBlock_set(union MemoryBlock* self, DataType* dataType, 
 					 size_t* index, void* data);
-void* MemoryBlock_at(union MemoryBlock* self, enum DataType* dataType, size_t* index);
-void MemoryBlock_print(union MemoryBlock* self, enum DataType* dataType, size_t* size);
-void MemoryBlock_insert(union MemoryBlock* self, enum DataType* dataType, size_t* index, 
+void* MemoryBlock_at(union MemoryBlock* self, DataType* dataType, size_t* index);
+void MemoryBlock_print(union MemoryBlock* self, DataType* dataType, size_t* size);
+void MemoryBlock_insert(union MemoryBlock* self, DataType* dataType, size_t* index, 
 						size_t* size, void* data);
-void MemoryBlock_erase(union MemoryBlock* self, enum DataType* dataType, 
+void MemoryBlock_erase(union MemoryBlock* self, DataType* dataType, 
 					   size_t* index, size_t* size);
-void MemoryBlock_sort(union MemoryBlock* self, enum DataType* dataType, size_t* size);
-void MemoryBlock_sort_reverse(union MemoryBlock* self, enum DataType* dataType, size_t* size);
+void MemoryBlock_sort(union MemoryBlock* self, DataType* dataType, size_t* size);
+void MemoryBlock_sort_reverse(union MemoryBlock* self, DataType* dataType, size_t* size);
 
 #endif /* MEMORY_BLOCK_H_ */
