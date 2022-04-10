@@ -20,9 +20,9 @@
 ******************************************************************************/
 void setup(void)
 {
-/*
+
 	unsigned char led1_PIN = 9;
-	unsigned char button_PIN = 13;
+/*	unsigned char button_PIN = 13;
 	unsigned char temp_PIN = 1;
 	
 	enum TimerSelection timer0_selection = TIMER0;
@@ -30,9 +30,9 @@ void setup(void)
 	
 	float timer0_delay = 300;
 	float timer1_delay = 500;
-	
+	*/
 	led1 = new_Led(&led1_PIN);
-	button = new_Button(&button_PIN);
+	/*button = new_Button(&button_PIN);
 	Button_enable_interrupt(button);
 	
 	timer0 = new_Timer(&timer0_selection, &timer0_delay);
