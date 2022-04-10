@@ -18,8 +18,8 @@
 * exempelvis är nödvändigt vid skrivning till EEPROM-minnet, så nollställs
 * I-biten via assemblerinstruktionen CLI (Clear Interrupt Flag).
 ******************************************************************************/
-#define ENABLE_INTERRUPTS sei() /* Aktiverar avbrott globalt. */
-#define DISABLE_INTERRUPTS cli() /* Inaktiverar avbrott globalt. */
+#define ENABLE_INTERRUPTS asm("SEI") /* Aktiverar avbrott globalt. */
+#define DISABLE_INTERRUPTS asm("CLI") /* Inaktiverar avbrott globalt. */
 
 /******************************************************************************
 * I programmet används bitmakron för bitoperationer. Bitmakron var mycket 
