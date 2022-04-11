@@ -1,8 +1,8 @@
-
 #ifndef DEFINITIONS_H_
 #define DEFINITIONS_H_
 
-#define F_CPU 16000000UL /* Sätter klockfrekvensen till 16 MHz. */
+//Sätter klockfrekvensen till 16 MHz. 
+#define F_CPU 16000000UL  
 
 /******************************************************************************
 * Inkluderingsdirektiv:
@@ -17,8 +17,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Headerfil för inkludering av union för enkel bithantering. (borttagen då filen är inaktuell och ligger lagrad i mapp.
-//#include "Byte.h" 
+// Headerfil för inkludering av union för enkel bithantering. (borttagen då filen är inaktuell och ligger lagrad i mapp.)
+// #include "Byte.h" 
 
 /******************************************************************************
 * För att aktivera avbrott globalt så ettställs I-flaggan (Interrupt Flag)
@@ -27,24 +27,29 @@
 * exempelvis är nödvändigt vid skrivning till EEPROM-minnet, så nollställs
 * I-biten via assemblerinstruktionen CLI (Clear Interrupt Flag).
 ******************************************************************************/
-#define ENABLE_INTERRUPTS asm("SEI") /* Aktiverar avbrott globalt. */
-#define DISABLE_INTERRUPTS asm("CLI") /* Inaktiverar avbrott globalt. */
+#define ENABLE_INTERRUPTS asm("SEI")
+#define DISABLE_INTERRUPTS asm("CLI")
 
 /******************************************************************************
-* I programmet används bitmakron för bitoperationer. Bitmakron var mycket 
-* utbrett innan inline-funktioner togs i bruk med C99.
+* Bitmakron för bitoperation:
+* SET_BIT - Ettställer bit i specifikt register.
+* CLEAR_BIT - Nollställer bit i specifikt register.
+* READ_BIT - Avläser bit i enskilt register.
+* ASSIGN - Tilldelar nytt värde, ettställer specifik bit
+* SET - Ettställer samtliga bitar i register.
+* CLEAR - Nollställer samtliga bitar i register.
 ******************************************************************************/
-#define SET_BIT(REGISTER, BIT) REGISTER |= (1 << BIT) /* Ettställer bit i specifikt register. */
-#define CLEAR_BIT(REGISTER, BIT) REGISTER &= ~(1 << BIT) /* Nollställer bit i specifikt register. */
-#define READ_BIT(REGISTER, BIT) (REGISTER &= (1 << BIT)) /* Avläser bit i enskilt register. */
-#define ASSIGN(REGISTER, BIT) REGISTER = (1 << BIT) /* Tilldelar nytt värde, ettställer specifik bit */
-#define SET(REGISTER) REGISTER = 0xFF /* Ettställer samtliga bitar i register. */
-#define CLEAR(REGISTER) REGISTER = 0x00 /* Nollställer samtliga bitar i register. */
+#define SET_BIT(REGISTER, BIT) REGISTER |= (1 << BIT)
+#define CLEAR_BIT(REGISTER, BIT) REGISTER &= ~(1 << BIT)
+#define READ_BIT(REGISTER, BIT) (REGISTER & (1 << BIT))
+#define ASSIGN(REGISTER, BIT) REGISTER = (1 << BIT) 
+#define SET(REGISTER) REGISTER = 0xFF 
+#define CLEAR(REGISTER) REGISTER = 0x00
 
-/* Typdefinitioner: */
-typedef enum { false, true } bool; /* Realiserar datatypen bool. */
-typedef enum { IO_PORTB, IO_PORTC, IO_PORTD } IO_port; /* Enumeration för I/O-portar. */
-typedef enum { TIMER0, TIMER1, TIMER2 } TimerSelection; /* Enumeration för timerkretsar. */
-typedef enum { INT, DOUBLE, SIZE_T, CHAR } DataType; /* Val av datatyp för vektor. */
+// Typdefinitioner:
+typedef enum { false, true } bool;
+typedef enum { IO_PORTB, IO_PORTC, IO_PORTD } IO_port; 
+typedef enum { TIMER0, TIMER1, TIMER2 } TimerSelection;
+//typedef enum { INT, DOUBLE, SIZE_T, CHAR } DataType;  //(Val av datatyp för vektor. - ej aktuell)
 
 #endif /* DEFINITIONS_H_ */
