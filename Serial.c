@@ -1,4 +1,4 @@
-/* Inkluderingsdirektiv: */
+// Inkluderingsdirektiv: 
 #include "Serial.h"
 
  /******************************************************************************

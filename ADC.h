@@ -1,8 +1,7 @@
-
 #ifndef ADC_H_
 #define ADC_H_
 
-/* Inkluderingsdirektiv: */
+// Inkluderingsdirektiv:
 #include "definitions.h"
 #include "Serial.h"
 
@@ -17,8 +16,8 @@
 * temp = 100 * Uin - 50,
 * där Uin är den beräknade analoga inspänningen (0 - 5 V).
 ******************************************************************************/
-#define VCC 5.0f /* Matningsspänning 5 V. */
-#define ADC_MAX 1023 /* Maxvärde vid AD-omvandling. */
+#define VCC 5.0f
+#define ADC_MAX 1023
 
 /******************************************************************************
 * För att välja intern matningsspänning för AD-omvandlaren, så ettställs biten
@@ -31,9 +30,9 @@
 * så väntar vi in att AD-omvandlingen är färdig via en while-sats. Biten
 * ADCSRA återställs inför nästa AD-omvandling genom att denna nollställs.
 ******************************************************************************/
-#define START_AD_CONVERSION ADCSRA = ((1 << ADEN) | (1 << ADSC) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0))
-#define WAIT_FOR_AD_CONVERSION_COMPLETE while (!READ_BIT(ADCSRA, ADIF))
-#define RESET_ADC_INTERRUPT_FLAG SET_BIT(ADCSRA, ADIF)
+#define START_AD_CONVERSION ADCSRA = (1 << ADEN) | (1 << ADSC) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0)
+#define WAIT_FOR_AD_CONVERSION_COMPLETE while ((ADCSRA & (1 << ADIF)) == 0) ;
+#define RESET_ADC_INTERRUPT_FLAG ADCSRA = (1 << ADIF)
 
 /******************************************************************************
 * Unionen Temperature används för att kunna justera mellan att lagra temperatur
@@ -42,8 +41,8 @@
 ******************************************************************************/
 union Temperature
 {
-	long rounded; /* Avrundad temperatur. */
-	double non_rounded; /* Icke-avrundad temperatur. */
+	long rounded;
+	double non_rounded;
 };
 
 /******************************************************************************
@@ -53,10 +52,9 @@ union Temperature
 typedef struct TempSensor
 {
 	uint8_t PIN;
-	float ADC_result;
-	union Temperature temperature;
+	
 	void (*print_temperature)(struct TempSensor* self);
-	void (*ADC_read)(struct TempSensor* self);
+	uint16_t (*ADC_read)(struct TempSensor* self);
 	
 } TempSensor;
 

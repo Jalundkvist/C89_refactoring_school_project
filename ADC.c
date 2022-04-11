@@ -3,7 +3,8 @@
 
 // Statiska funktioner:
 static void print_temperature(TempSensor* self);
-static void ADC_read(TempSensor* self);
+static uint16_t ADC_read(TempSensor* self);
+static void init_ADC(void);
 
 /******************************************************************************
 * Funktionen new_TempSensor används för implementering av en temperatursensor 
@@ -16,8 +17,7 @@ TempSensor new_TempSensor(uint8_t PIN)
 {
 	TempSensor self;
 	self.PIN = PIN;
-	self.ADC_result = 0x00;
-	self.temperature.rounded = 0x00;
+	init_ADC();
 	self.print_temperature = print_temperature;
 	self.ADC_read = ADC_read;
 	return self;
@@ -34,23 +34,21 @@ TempSensor new_TempSensor(uint8_t PIN)
 *
 * Därefter beräknas motsvarande temperatur i grader Celcius via följande formel:
 *
-*							temperatur = 100 * Uin - 50,
+*							temp = 100 * Uin - 50,
 *
 * där Uin är den beräknade analoga inspänningen (0 - 5 V).
 *
 * Slutligen transmitteras den beräknade temperaturen till vår PC via anrop av
 *  funktionen serial_print_integer, som möjliggör sammansättning av text och 
-* heltal samt seriell överföring. Därmed transmitteras textstycktet 
-* "Temperature: %d degrees", där %d är formatspecificerare för heltal och 
-* ersätts med avläst rumstemperatur.
+* heltal samt seriell överföring. Därmed transmitteras textstycktet.
 ******************************************************************************/
 static void print_temperature(TempSensor* self)
 {
-	float Uin;
-	ADC_read(self);
-	Uin = VCC * (float)(self->ADC_result / ADC_MAX);
-	self->temperature.rounded = (float)(100 * Uin - 50 + 0.5);
-	serial_print_integer("Temperature: %d degrees Celcius\n", self->temperature.rounded);
+	const uint16_t ADC_result = self->ADC_read(self);
+	const double Uin = VCC * (double)(ADC_result)/ADC_MAX;
+	const double temp = (100 * Uin - 50);
+	const int8_t rounded_temp = (int8_t)(temp + 0.5);
+	serial_print_integer("Temperature: %d degrees Celcius\n", rounded_temp);
 	return;
 }
 
@@ -65,11 +63,26 @@ static void print_temperature(TempSensor* self)
 * ettställd. För att sedan återställa ADIF inför nästa AD-omvandlaren så 
 * ettställs denna, följt av att avläst resultat returneras vid återhoppet.
  ******************************************************************************/
-static void ADC_read(TempSensor* self)
+static uint16_t ADC_read(TempSensor* self)
 {
 	ADMUX = ((1 << REFS0)|self->PIN);
-	START_AD_CONVERSION;
-	WAIT_FOR_AD_CONVERSION_COMPLETE;
-	RESET_ADC_INTERRUPT_FLAG;
-	self->ADC_result = ADC;
+	ADCSRA = (1 << ADEN) | (1 << ADSC) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
+	while ((ADCSRA & (1 << ADIF)) == 0) ;
+	ADCSRA = (1 << ADIF);
+	return ADC;
+}
+
+ /******************************************************************************
+* Funktionen init_ADC används för att initiera AD-omvandlaren då första
+* AD-omvandlingen kan vara felaktig.
+* 
+* Inparameter: Ingen - void.
+* Returvärde: Ingen.
+ ******************************************************************************/
+static void init_ADC(void)
+{
+	ADMUX = (1 << REFS0);
+	ADCSRA = (1 << ADEN) | (1 << ADSC) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
+	while ((ADCSRA & (1 << ADIF)) == 0) ;
+	ADCSRA = (1 << ADIF);
 }
