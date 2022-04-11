@@ -24,7 +24,7 @@ void setup(void)
 	button = new_Button(13);
 	button.enable_interrupt(&button);
 	timer0 = new_Timer(TIMER0, 300);
-	timer1 = new_Timer(TIMER1, 10000);
+	timer1 = new_Timer(TIMER1, 60000);
 	timer1.on(&timer1);
 	
 	tempSensor = new_TempSensor(1);
