@@ -1,7 +1,7 @@
 // Inkluderingsdirektiv: 
 #include "Timer.h"
 
-// Funktionsdeklarationer:
+// Statiska funktioner:
 static void Timer_on(Timer* self);
 static void Timer_off(Timer* self);
 static void Timer_toggle(Timer* self);
@@ -11,7 +11,7 @@ static void Timer_clear(Timer* self);
 static void Timer_reset(Timer* self);
 static void Timer_set(Timer* self, const uint32_t delay_time);
 static void init_timer(const TimerSelection timerSelection);
-static uint32_t get_required_interrupts(const uint32_t delay_time);
+static inline uint32_t get_required_interrupts(const uint32_t delay_time);
 
 /******************************************************************************
 * Funktionen new_Timer används för att skapa och initiera objekt av strukten 
@@ -20,17 +20,17 @@ static uint32_t get_required_interrupts(const uint32_t delay_time);
 * den fördröjningstid som timern skall räkna till, mätt i millisekunder.
 *
 * Ett nytt objekt av strukten Timer initieras som döps till self.
-* Struktens medlemmar; 
-* enabled sätts till false för att indikera att timer-kretsen är avstängd 
-* vid start, vald timerkrets sparas via medlemmen timerSelection, 
+* Struktens medlemmar initieras;
+* enabled sätts till false för att indikera att timer-kretsen är avstängd
+* vid start, vald timerkrets sparas via medlemmen timerSelection,
 * antalet exekverade avbrott sätts till noll vid start
 * medan antalet avbrott som krävs för specificerad fördröjningstid
-* beräknas via anrop av funktionen get_required_interrupts, där ingående 
+* beräknas via anrop av funktionen get_required_interrupts, där ingående
 * argument delay_time passeras som parameter. Returvärdet från detta anrop,
-* vilket är beräknat antalet avbrott som krävs för specificerad fördröjningtid, 
-* lagras sedan via medlemmen required_interrupts. Slutligen returneras det nu 
-* initierade objektet self, som är redo att användas för implementering av 
-* en given timerkrets.
+* vilket är beräknat antalet avbrott som krävs för specificerad fördröjningtid,
+* lagras sedan via medlemmen
+* required_interrupts. Slutligen returneras det nu initierade objektet self,
+* som är redo att användas för implementering av en given timerkrets.
 ******************************************************************************/
 Timer new_Timer(const TimerSelection timerSelection, const uint32_t delay_time)
 {
@@ -77,7 +77,6 @@ static void Timer_on(Timer* self)
 	{
 		ENABLE_TIMER2;
 	}
-	
 	self->enabled = true;
 	return;
 }
@@ -105,7 +104,6 @@ void Timer_off(Timer* self)
 	{
 		DISABLE_TIMER2;
 	}
-	
 	self->enabled = false;
 	return;
 }
@@ -267,7 +265,7 @@ static void init_timer(const TimerSelection timerSelection)
 * avbrott som krävs för specificerad fördröjningstid avrundas till närmaste
 * heltal via anrop av funktionen round_to_integer och returneras sedan.
 ******************************************************************************/
-static uint32_t get_required_interrupts(const uint32_t delay_time)
+static inline uint32_t get_required_interrupts(const uint32_t delay_time)
 {
 	return (uint32_t)(delay_time / INTERRUPT_TIME + 0.5);
 }
