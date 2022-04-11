@@ -69,3 +69,26 @@ Inlämningsuppgift för inbyggda system 1.
 	7.3 BIT-macro removed.
 	7.4 Updated struct
 	7.5 Updated files using timer functions.
+
+		Timer now working
+		
+8. Troubleshooting ADC for temperature measurment.
+	8.1 Macro: SELECT_ANALOG_CHANNEL removed, did not include PIN for ADC_read.
+	8.2 Functions made static, ADC struct now uses function pointers.
+	8.3 ADDED: Function init_ADC to initialize the AD-converter
+	8.4 BIT-macro removed.
+	8.5 CHANGED: print_temperature now holds variables instead of ADC struct. As the variables are not needed after print and variables are freed from stack.
+
+		Program is now completely updated from C89 to C99.
+		
+		TODO: Improvements.
+	-> Add vector struct
+	-> Add dynamic timer struct
+	-> Add button to switch between temperature units.
+	-> Add 2 7-segment displays to visualize temperature.
+	
+9. Added Vector struct
+	9.1 Made vector struct use function pointers.
+
+10. Added ...
+		
