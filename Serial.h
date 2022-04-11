@@ -2,7 +2,7 @@
 #ifndef SERIAL_H_
 #define SERIAL_H_
 
-/* Inkluderingsdirektiv: */
+// Inkluderingsdirektiv:
 #include "definitions.h"
 
 /******************************************************************************
@@ -19,7 +19,7 @@
 * där F_CPU är mikrodatorns klockfrekvens och Baud Rate är önskad bithastighet.
 *
 * För att ställa in 8-bitars överföring ettställs bitarna UCSZ01 och UCSZ00 
-* i  kontrollregistret UCSR0C (USART Control and Status Register 0C).
+* i kontrollregistret UCSR0C (USART Control and Status Register 0C).
 *
 * För att vänta tills eventuellt föregående tecken har transmitterats, så
 * implementeras en while-sats, som exekverar så länge dataregistret UDR0
@@ -48,7 +48,7 @@
 #define SIZE 100
 // Strängens kapacititet innan var innan 5.
 
-/* Funktionsdeklarationer: */
+// Funktionsdeklarationer:
 void init_serial(void);
 void serial_print(char* s);
 void serial_print_integer(char* s, int32_t number);
