@@ -1,26 +1,25 @@
-#include "ADC.h" /* Inkluderar egen headerfil. */
+// Inkluderar egen headerfil.
+#include "ADC.h"
+
+// Statiska funktioner:
+static void print_temperature(TempSensor* self);
+static void ADC_read(TempSensor* self);
 
 /******************************************************************************
 * Funktionen new_TempSensor används för implementering av en temperatursensor 
 * ansluten till någon av analoga pinnar A0 - A5 via ett objekt av strukten
 * TempSensor. Ingående argument PIN utgör en pekare till aktuellt PIN-nummer. 
-* Först allokeras minne för ett nytt objekt av strukten TempSensor döpt self.
-* Ifall minnesallokeringen misslyckas så avslutas funktionen direkt. Annars
-* initieras objektets instansvariabler, följt av att det initierade objektet
-* returneras.
+* Först skapas ett objekt av structen TempSensor döpt self. Därefter initieras
+* objektets instansvariabler, följt av att det initierade objektet returneras.
 ******************************************************************************/
-TempSensor* new_TempSensor(unsigned char* PIN)
+TempSensor new_TempSensor(uint8_t PIN)
 {
-	TempSensor* self = (TempSensor*)malloc(sizeof(TempSensor));
-	
-	if (!self)
-	{
-		 return NULL;
-	}
-	
-	(*self).PIN = *PIN;
-	(*self).ADC_result = 0x00;
-	(*self).temperature.rounded = 0x00;
+	TempSensor self;
+	self.PIN = PIN;
+	self.ADC_result = 0x00;
+	self.temperature.rounded = 0x00;
+	self.print_temperature = print_temperature;
+	self.ADC_read = ADC_read;
 	return self;
 }
 
@@ -45,13 +44,13 @@ TempSensor* new_TempSensor(unsigned char* PIN)
 * "Temperature: %d degrees", där %d är formatspecificerare för heltal och 
 * ersätts med avläst rumstemperatur.
 ******************************************************************************/
-void print_temperature(TempSensor* self)
+static void print_temperature(TempSensor* self)
 {
 	float Uin;
-	ADC_read(&(*self).ADC_result);
-	Uin = VCC * ((*self).ADC_result / ADC_MAX);
-	(*self).temperature.rounded = (int)(100 * Uin - 50 + 0.5);
-	serial_print_integer("Temperature: %d degrees Celcius\n", ((*self).temperature.rounded));
+	ADC_read(self);
+	Uin = VCC * (float)(self->ADC_result / ADC_MAX);
+	self->temperature.rounded = (float)(100 * Uin - 50 + 0.5);
+	serial_print_integer("Temperature: %d degrees Celcius\n", self->temperature.rounded);
 	return;
 }
 
@@ -66,12 +65,11 @@ void print_temperature(TempSensor* self)
 * ettställd. För att sedan återställa ADIF inför nästa AD-omvandlaren så 
 * ettställs denna, följt av att avläst resultat returneras vid återhoppet.
  ******************************************************************************/
-void ADC_read(unsigned short* ADC_result)
+static void ADC_read(TempSensor* self)
 {
-	SELECT_ANALOG_CHANNEL;
+	ADMUX = ((1 << REFS0)|self->PIN);
 	START_AD_CONVERSION;
 	WAIT_FOR_AD_CONVERSION_COMPLETE;
 	RESET_ADC_INTERRUPT_FLAG;
-	*ADC_result = ADC;
-	return;
+	self->ADC_result = ADC;
 }

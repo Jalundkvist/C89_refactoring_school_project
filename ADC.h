@@ -31,10 +31,9 @@
 * så väntar vi in att AD-omvandlingen är färdig via en while-sats. Biten
 * ADCSRA återställs inför nästa AD-omvandling genom att denna nollställs.
 ******************************************************************************/
-#define SELECT_ANALOG_CHANNEL SET_BIT(ADMUX, REFS0);
-#define START_AD_CONVERSION SET(ADCSRA)
-#define WAIT_FOR_AD_CONVERSION_COMPLETE while (!READ_BIT(ADCSRA, ADIF)) ;
-#define RESET_ADC_INTERRUPT_FLAG CLEAR_BIT(ADCSRA, ADIF)
+#define START_AD_CONVERSION ADCSRA = ((1 << ADEN) | (1 << ADSC) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0))
+#define WAIT_FOR_AD_CONVERSION_COMPLETE while (!READ_BIT(ADCSRA, ADIF))
+#define RESET_ADC_INTERRUPT_FLAG SET_BIT(ADCSRA, ADIF)
 
 /******************************************************************************
 * Unionen Temperature används för att kunna justera mellan att lagra temperatur
@@ -53,14 +52,16 @@ union Temperature
 ******************************************************************************/
 typedef struct TempSensor
 {
-	unsigned char PIN; /* PIN-nummer för avläsning. */
-	unsigned short ADC_result; /* Lagring av resultat från AD-omvandling. */
-	union Temperature temperature; /* Aktuell rumstemperatur. */
+	uint8_t PIN;
+	float ADC_result;
+	union Temperature temperature;
+	void (*print_temperature)(struct TempSensor* self);
+	void (*ADC_read)(struct TempSensor* self);
+	
 } TempSensor;
 
-/* Funktionsdeklarationer: */
-TempSensor* new_TempSensor(unsigned char* PIN);
-void print_temperature(struct TempSensor* self);
-void ADC_read(unsigned short* ADC_result);
+// Funktionsdeklarationer:
+TempSensor new_TempSensor(uint8_t PIN);
+
 
 #endif /* ADC_H_ */

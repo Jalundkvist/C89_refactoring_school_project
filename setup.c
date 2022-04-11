@@ -27,7 +27,7 @@ void setup(void)
 	timer1 = new_Timer(TIMER1, 10000);
 	timer1.on(&timer1);
 	
-	//tempSensor = new_TempSensor(&temp_PIN);
+	tempSensor = new_TempSensor(1);
 	
 	init_serial();
 	return;

@@ -14,7 +14,7 @@ Led led1;
 Button button; 
 Timer timer0;
 Timer timer1; 
-//struct TempSensor* tempSensor;
+TempSensor tempSensor;
 
 // Funktionsdeklarationer:
 void setup(void);
