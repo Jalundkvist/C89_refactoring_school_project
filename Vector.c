@@ -17,7 +17,9 @@ static void Vector_print(Vector* self);
 * medlemmar initieras. Pekaren data sätts till en nullpekare, då denna inte
 * har någon befintlig minnesadress att peka på vid start (inget minne är
 * allokerat för arrayen). Instansvariabel elements sätts till 0x00 vid start,
-* då arrayen är tom. Slutligen returneras objektet, som nu är färdigt att
+* då arrayen är tom. 
+* Därefter sätts pekarna till att peka på motsvarande funktioner i filen.
+* Slutligen returneras objektet, som nu är färdigt att
 * användas som en dynamisk array.
 ******************************************************************************/
 Vector new_Vector(void)
