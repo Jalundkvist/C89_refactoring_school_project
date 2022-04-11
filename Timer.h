@@ -87,21 +87,22 @@ typedef struct Timer
 {
 	bool enabled;
 	TimerSelection timerSelection;
-	unsigned long executed_interrupts;
-	unsigned long required_interrupts;
+	uint32_t executed_interrupts;
+	uint32_t required_interrupts;
+	
+	void (*on)(struct Timer*);
+	void (*off)(struct Timer*);
+	void (*toggle)(struct Timer*);
+	void (*count)(struct Timer*);
+	bool (*elapsed)(struct Timer*);
+	void (*clear)(struct Timer*);
+	void (*reset)(struct Timer*);
+	void (*set)(struct Timer*, const uint32_t);
+	
 } Timer;
 
-/* Funktionsdeklarationer: */
-Timer* new_Timer(TimerSelection* timerSelection, float* delay_time);
-void Timer_on(struct Timer* self);
-void Timer_off(struct Timer* self);
-void Timer_toggle(struct Timer* self);
-void Timer_count(struct Timer* self);
-bool Timer_elapsed(struct Timer* self);
-void Timer_clear(struct Timer* self);
-void Timer_reset(struct Timer* self);
-void Timer_set(struct Timer* self, float* delay_time);
-void init_timer(TimerSelection* timerSelection);
-unsigned long get_required_interrupts(float* delay_time);
+// Funktionsdeklarationer:
+Timer new_Timer(const TimerSelection timerSelection, const uint32_t delay_time);
+
 
 #endif /* TIMER_H_ */

@@ -12,8 +12,8 @@
 /* Globala variabler: */
 Led led1; 
 Button button; 
-struct Timer *timer0, *timer1; 
-struct TempSensor* tempSensor;
+struct Timer timer0, timer1; 
+//struct TempSensor* tempSensor;
 
 /* Funktionsdeklarationer: */
 void setup(void);
