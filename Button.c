@@ -1,4 +1,4 @@
-/* Inkluderingsdirektiv: */
+// Inkluderingsdirektiv:
 #include "GPIO.h"
 
 static bool Button_is_pressed(struct Button* self);
@@ -14,13 +14,12 @@ static void Button_disable_interrupt(struct Button* self);
 *     0 - 7                     D         Samma som PIN på Arduino Uno        *
 *     8 - 13                    B            PIN på Arduino Uno - 8           *
 *******************************************************************************
-*
-* Först allokeras minne för ett nytt objekt av strukten Button döpt self. 
-* Om minnesallokeringen misslyckas så returneras NULL direkt. Annars initieras 
-* objektets instansvariabler. Specificerat PIN-nummer sparas, följt av att denna 
-* undersöks för att ta reda på vilken I/O-port som tryckknappaen är ansluten 
-* till, där 0 - 7 innebär att tryckknappen är ansluten till samma PIN på 
-* I/O-port D. Annars om aktuellt PIN-nummer ligger mellan 8 - 13, så är 
+* Först initieras nytt objekt av strukten Button döpt self. 
+* Sedan initieras objektets instansvariabler. Specificerat PIN-nummer sparas,
+* följt av att denna undersöks för att ta reda på vilken I/O-port som 
+* tryckknappen är ansluten till, där 0 - 7 innebär att tryckknappen är 
+* ansluten till samma PIN på I/O-port D. 
+* Annars om aktuellt PIN-nummer ligger mellan 8 - 13, så är 
 * tryckknappen ansluten till PIN 0 - 5  på I/O-port B. En intern 
 * pullup-resistor på tryckknappens PIN aktiveras via ettställning av 
 * motsvarande bit i aktuellt PORT-register, vilket medför att tryckknappens
@@ -103,7 +102,6 @@ static void Button_enable_interrupt(Button* self)
 	}
 	
 	self->interrupt_enabled = true;
-	return;
 	return;
 }
 
