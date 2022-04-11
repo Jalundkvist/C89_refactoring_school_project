@@ -49,7 +49,7 @@ Timer new_Timer(const TimerSelection timerSelection, const uint32_t delay_time)
 	self.elapsed = Timer_elapsed;
 	self.clear = Timer_clear;
 	self.reset = Timer_reset;
-	self.set = Timer_set;
+	self.set =  Timer_set;
 	
 	return self;
 }

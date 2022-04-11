@@ -15,9 +15,9 @@ typedef struct Led
 	uint8_t PIN;
 	bool enabled;
 	IO_port io_port;
-	void (*on)(struct Led* self);
-	void (*off)(struct Led* self);
-	void (*toggle)(struct Led* self);
+	void (*on)(struct Led*);
+	void (*off)(struct Led*);
+	void (*toggle)(struct Led*);
 }Led;
 
 /******************************************************************************
