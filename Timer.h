@@ -1,8 +1,7 @@
-
 #ifndef TIMER_H_
 #define TIMER_H_
 
-/* Inkluderingsdirektiv: */
+// Inkluderingsdirektiv:
 #include "definitions.h"
 
 /******************************************************************************
@@ -23,7 +22,7 @@
 * För att initiera timerkrets Timer 1 utan prescaler i CTC Mode, så att avbrott 
 * sker vid ett lägre värde än när overflow sker, vilket annars sker vid 
 * uppräkning till 65 536 för en 16-bitars räknare, så ettställs bitar CS10 
-* (Clock Select 1 bit 0) samt WGM11 (Waveform Generator Mode 1 bit 1) i 
+* (Clock Select 1 bit 0) samt WGM12 (Waveform Generator Mode 2 bit 2) i 
 * kontrollregistret TCCR1B (Timer/Counter Control Register 1B). CS10 används 
 * för att ställa in uppräkningsfrekvensen utan prescaler (16 MHz), medan WGM12 
 * används för att Timer 1 skall arbeta i CTC Mode i stället för Normal Mode.
@@ -39,12 +38,12 @@
 * som för Timer 0. Dessa register uppgår båda till 8-bitar, vilket alltså
 * medför overflow vid uppräkning till 256.
 ******************************************************************************/
-#define INIT_TIMER0 ASSIGN(TCCR0B, CS00) /* Initierar Timer 0 i Normal Mode. */
-#define INIT_TIMER1 ASSIGN(TCCR1B, WGM11) /* Initierar Timer 1 i CTC Mode. */
-#define INIT_TIMER2 ASSIGN(TCCR2B, CS20) /* Initierar Timer 2 i Normal Mode. */
+#define INIT_TIMER0 TCCR0B = (1<<CS00)
+#define INIT_TIMER1 TCCR1B = (1<<CS10)|(1<<WGM12)
+#define INIT_TIMER2 TCCR2B = (1<<CS20)
 
-#define SET_TIMER1_LIMIT OCR1A = 256 /* CTC-avbrott för Timer 1 sker vid uppräkning till 256. */
-#define INTERRUPT_TIME 0.016f /* 0.016 ms mellan timergenererade avbrott. */
+#define SET_TIMER1_LIMIT OCR1A = 256
+#define INTERRUPT_TIME 0.016f
 
 /******************************************************************************
 * För att aktivera Timer 0 i Normal Mode ettställs biten TOIE0 (Timer/Counter
@@ -62,13 +61,13 @@
 * Register 2). För att inaktivera avbrott nollställs i stället detta register.
 * Avbrottsvektor för Timer 2 i Normal Mode är TIMER2_OVF_vect.
 ******************************************************************************/
-#define ENABLE_TIMER0 ASSIGN(TIMSK0, TOIE0) /* Aktiverar Timer 0 i Normal Mode. */
-#define ENABLE_TIMER1 ASSIGN(TIMSK1, TOIE1) /* Aktiverar Timer 1 i CTC Mode. */
-#define ENABLE_TIMER2 ASSIGN(TIMSK2, TOIE2) /* Aktiverar Timer 2 i Normal Mode. */
+#define ENABLE_TIMER0 TIMSK0 = (1 << TOIE0)
+#define ENABLE_TIMER1 TIMSK1 = (1 << OCIE1A)
+#define ENABLE_TIMER2 TIMSK2 = (1 << TOIE2)
 
-#define DISABLE_TIMER0 CLEAR(TIMSK0) /* Inaktiverar Timer 0 i Normal Mode. */
-#define DISABLE_TIMER1 CLEAR(TIMSK0) /* Inaktiverar Timer 1 i CTC Mode. */
-#define DISABLE_TIMER2 CLEAR(TIMSK2) /* Inaktiverar Timer 2 i Normal Mode. */
+#define DISABLE_TIMER0 TIMSK0 = 0x00
+#define DISABLE_TIMER1 TIMSK1 = 0x00
+#define DISABLE_TIMER2 TIMSK2 = 0x00
 
 /******************************************************************************
 * Strukten Timer används för att implementera mikrodatorns timerkretsar via
@@ -86,10 +85,10 @@
 ******************************************************************************/
 typedef struct Timer
 {
-	bool enabled; /* Indikerar ifall timern är aktiverad. */
-	TimerSelection timerSelection; /* Använd timerkrets. */
-	unsigned long executed_interrupts; /* Antalet avbrott som har ägt rum. */
-	unsigned long required_interrupts; /* Antalet avbrott som krävs för aktuell fördröjning. */
+	bool enabled;
+	TimerSelection timerSelection;
+	unsigned long executed_interrupts;
+	unsigned long required_interrupts;
 } Timer;
 
 /* Funktionsdeklarationer: */
