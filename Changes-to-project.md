@@ -51,3 +51,21 @@ Inlämningsuppgift för inbyggda system 1.
 	5.2 Void functions made static and struct uses function pointers instead.
 	5.3 removed pointers "self"
 	5.4 BIT-macro removed
+	
+		Led functions working
+		
+6. Troubleshooting Button struct.
+	5.1 Updated struct
+	5.2 Void functions made static and struct uses function pointers instead.
+	5.3 removed pointers "self"
+	5.4 BIT-macro removed
+	5.5 subtract 8 from PIN if PIN is between 8-13 (PORTB).
+
+		Buttons now working.
+
+7. Troubleshooting Timer struct.
+	7.1 Macro: DISABLE_TIMER1, incorrect. Cleared TIMSK0 instead of TIMSK1.
+	7.2 Macro: INIT_TIMER1 was incorrect, missed setting CS10 AND WGM12. Used only WGM11 which is used for PWM-mode.
+	7.3 BIT-macro removed.
+	7.4 Updated struct
+	7.5 Updated files using timer functions.
