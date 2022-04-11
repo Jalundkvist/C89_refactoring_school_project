@@ -1,5 +1,17 @@
-/* Inkluderingsdirektiv: */
+// Inkluderingsdirektiv: 
 #include "Timer.h"
+
+// Statiska funktioner:
+static void Timer_on(Timer* self);
+static void Timer_off(Timer* self);
+static void Timer_toggle(Timer* self);
+static void Timer_count(Timer* self);
+static bool Timer_elapsed(Timer* self);
+static void Timer_clear(Timer* self);
+static void Timer_reset(Timer* self);
+static void Timer_set(Timer* self, const uint32_t delay_time);
+static void init_timer(const TimerSelection timerSelection);
+static inline uint32_t get_required_interrupts(const uint32_t delay_time);
 
 /******************************************************************************
 * Funktionen new_Timer används för att skapa och initiera objekt av strukten 
@@ -7,33 +19,38 @@
 * timerkretsar Timer 0 - 2 som skall användas, medan delay_time utgörs av
 * den fördröjningstid som timern skall räkna till, mätt i millisekunder.
 *
-* Först allokeras minne för ett nytt objekt av strukten Timer, som döps 
-* till self. Om minnesallokeringen misslyckas returneras NULL direkt. Annars
-* initieras struktens medlemmar; enabled sätts till false för att indikera
-* att timer-kretsen är avstängd vid start, vald timerkrets sparas via 
-* medlemmen timerSelection, antalet exekverade avbrott sätts till noll vid
-* start, medan antalet avbrott som krävs för specificerad fördröjningstid
-* beräknas via anrop av funktionen get_required_interrupts, där ingående 
+* Ett nytt objekt av strukten Timer initieras som döps till self.
+* Struktens medlemmar initieras;
+* enabled sätts till false för att indikera att timer-kretsen är avstängd
+* vid start, vald timerkrets sparas via medlemmen timerSelection,
+* antalet exekverade avbrott sätts till noll vid start
+* medan antalet avbrott som krävs för specificerad fördröjningstid
+* beräknas via anrop av funktionen get_required_interrupts, där ingående
 * argument delay_time passeras som parameter. Returvärdet från detta anrop,
-* vilket är beräknat antalet avbrott som krävs för specificerad fördröjningtid, 
-* lagras sedan via medlemmen required_interrupts. Slutligen returneras det nu 
-* initierade objektet self, som är redo att användas för implementering av 
-* en given timerkrets.
+* vilket är beräknat antalet avbrott som krävs för specificerad fördröjningtid,
+* lagras sedan via medlemmen
+* required_interrupts. Slutligen returneras det nu initierade objektet self,
+* som är redo att användas för implementering av en given timerkrets.
 ******************************************************************************/
-Timer* new_Timer(TimerSelection* timerSelection, float* delay_time)
+Timer new_Timer(const TimerSelection timerSelection, const uint32_t delay_time)
 {
-	Timer* self = (Timer*)malloc(sizeof(Timer));
+	Timer self;
 	
-	if (!self) 
-	{
-		return NULL;
-	}
+	self.enabled = false;
+	self.timerSelection = timerSelection;
+	self.executed_interrupts = 0x00;
+	self.required_interrupts = get_required_interrupts(delay_time);
+	init_timer(self.timerSelection);
 	
-	(*self).enabled = false;
-	(*self).timerSelection = *timerSelection;
-	(*self).executed_interrupts = 0x00;
-	(*self).required_interrupts = get_required_interrupts(delay_time);
-	init_timer(&(*self).timerSelection);
+	self.on = Timer_on;
+	self.off = Timer_off;
+	self.toggle =Timer_toggle;
+	self.count = Timer_count;
+	self.elapsed = Timer_elapsed;
+	self.clear = Timer_clear;
+	self.reset = Timer_reset;
+	self.set = Timer_set;
+	
 	return self;
 }
 
@@ -44,24 +61,23 @@ Timer* new_Timer(TimerSelection* timerSelection, float* delay_time)
 * aktiveras. Aktuell timerkrets aktiveras, följt av att medlemmen enabled 
 * sätts till true för att indikera att timern i fråga nu är aktiverad.
 ******************************************************************************/
-void Timer_on(Timer* self)
+static void Timer_on(Timer* self)
 {
-	if ((*self).timerSelection == TIMER0) 
+	if (self->timerSelection == TIMER0)
 	{
 		ENABLE_TIMER0;
 	}
 	
-	else if ((*self).timerSelection == TIMER1)
+	else if (self->timerSelection == TIMER1)
 	{
 		ENABLE_TIMER1;
 	}
 	
-	else if ((*self).timerSelection == TIMER2)
+	else if (self->timerSelection == TIMER2)
 	{
 		ENABLE_TIMER2;
 	}
-	
-	(*self).enabled = true;
+	self->enabled = true;
 	return;
 }
 
@@ -72,24 +88,23 @@ void Timer_on(Timer* self)
 * inaktiveras. Aktuell timerkrets inaktiveras, följt av att medlemmen enabled
 * sätts till false för att indikera att timern i fråga nu är inaktiverad.
 ******************************************************************************/
- void Timer_off(Timer* self)
+void Timer_off(Timer* self)
 {
-	if ((*self).timerSelection == TIMER0)
+	if (self->timerSelection == TIMER0)
 	{
 		DISABLE_TIMER0;
 	}
 	
-	else if ((*self).timerSelection == TIMER1)
+	else if (self->timerSelection == TIMER1)
 	{
 		DISABLE_TIMER1;
 	}
 	
-	else if ((*self).timerSelection == TIMER2)
+	else if (self->timerSelection == TIMER2)
 	{
 		DISABLE_TIMER2;
 	}
-	
-	(*self).enabled = false;
+	self->enabled = false;
 	return;
 }
 
@@ -102,14 +117,14 @@ void Timer_on(Timer* self)
 * för tillfället är inaktiverad (enabled är false), så stängs den av via 
 * funktionen Timer_on, som anropas via pekaren on.
 ******************************************************************************/
-void Timer_toggle(Timer* self)
+static void Timer_toggle(Timer* self)
 {
-	if ((*self).enabled)
+	if (self->enabled)
 	{
 		Timer_off(self);
 	}
 	
-	else 
+	else
 	{
 		Timer_on(self);
 	}
@@ -124,11 +139,11 @@ void Timer_toggle(Timer* self)
 * om timern är inaktiverad sker ingen uppräkning, så att timern inte av 
 * misstag skall löpa ut och orsaka avbrott när den är avstängd.
 ******************************************************************************/
-void Timer_count(Timer* self)
+static void Timer_count(Timer* self)
 {
-	if ((*self).enabled)
+	if (self->enabled)
 	{
-		(*self).executed_interrupts++;
+		self->executed_interrupts++;
 	}
 	
 	return;
@@ -149,11 +164,11 @@ void Timer_count(Timer* self)
 * har löpt ut. Annars om timern inte har löpt ut så returneras false utan att
 * timern nollställs. 
 ******************************************************************************/
-bool Timer_elapsed(Timer* self)
+static bool Timer_elapsed(Timer* self)
 {
-	if ((*self).executed_interrupts >= (*self).required_interrupts)
+	if (self->executed_interrupts >= self->required_interrupts)
 	{
-		(*self).executed_interrupts = 0x00;
+		self->executed_interrupts = 0x00;
 		return true;
 	}
 	
@@ -165,9 +180,9 @@ bool Timer_elapsed(Timer* self)
 * argument self utgör en pekare till ett timerobjekt, vars medlem 
 * executed_interrupts nollställs för att därigenom nollställs timerkretsen.
 ******************************************************************************/
-void Timer_clear(Timer* self)
+static void Timer_clear(Timer* self)
 {
-	(*self).executed_interrupts = 0x00;
+	self->executed_interrupts = 0x00;
 	return;
 }
 
@@ -179,13 +194,12 @@ void Timer_clear(Timer* self)
 * exekverade avbrott för att nollställs timern, vilket sker via nollställning
 * av timerobjektets medlem executed_interrupts.
 ******************************************************************************/
-void Timer_reset(Timer* self)
+static void Timer_reset(Timer* self)
 {
-	Timer_off(self);
-	(*self).executed_interrupts = 0x00;
+	self->off(self);
+	self->executed_interrupts = 0x00;
 	return;
 }
-
 /******************************************************************************
 * Funktionen Timer_set används för att uppdatera fördröjningstiden på en given
 * timer. Ingående argument self utgörs av en pekare till ett timerobjekt, 
@@ -194,9 +208,9 @@ void Timer_reset(Timer* self)
 * uppdateras via anrop av funktionen get_required_interrupts, där ingående
 * argument delay_time passeras som ingående argument.
 ******************************************************************************/
-void Timer_set(Timer* self, float* delay_time)
+static void Timer_set(Timer* self, const uint32_t delay_time)
 {
-	(*self).required_interrupts = get_required_interrupts(delay_time);
+	self->required_interrupts = get_required_interrupts(delay_time);
 	return;
 }
 
@@ -220,20 +234,20 @@ void Timer_set(Timer* self, float* delay_time)
 * därmed CTC Mode, där timern nollställs automatiskt vid uppräkning till
 * förvalt maxvärde, vilket i detta fall är 256.
 ******************************************************************************/
-void init_timer(TimerSelection* timerSelection)
+static void init_timer(const TimerSelection timerSelection)
 {
-	if (*timerSelection == TIMER0) 
+	if (timerSelection == TIMER0)
 	{
 		INIT_TIMER0;
 	}
 	
-	else if (*timerSelection == TIMER1)
+	else if (timerSelection == TIMER1)
 	{
 		INIT_TIMER1;
 		SET_TIMER1_LIMIT;
 	}
 	
-	else if (*timerSelection == TIMER2)
+	else if (timerSelection == TIMER2)
 	{
 		INIT_TIMER2;
 	}
@@ -251,7 +265,7 @@ void init_timer(TimerSelection* timerSelection)
 * avbrott som krävs för specificerad fördröjningstid avrundas till närmaste
 * heltal via anrop av funktionen round_to_integer och returneras sedan.
 ******************************************************************************/
-unsigned long get_required_interrupts(float* delay_time)
+static inline uint32_t get_required_interrupts(const uint32_t delay_time)
 {
-	return (unsigned long)(*delay_time / INTERRUPT_TIME + 0.5);
+	return (uint32_t)(delay_time / INTERRUPT_TIME + 0.5);
 }

@@ -20,26 +20,14 @@
 ******************************************************************************/
 void setup(void)
 {
-
-	
-/*	unsigned char button_PIN = 13;
-	unsigned char temp_PIN = 1;
-	
-	enum TimerSelection timer0_selection = TIMER0;
-	enum TimerSelection timer1_selection = TIMER1;
-	
-	float timer0_delay = 300;
-	float timer1_delay = 500;
-	*/
 	led1 = new_Led(9);
 	button = new_Button(13);
 	button.enable_interrupt(&button);
-	/*
-	timer0 = new_Timer(&timer0_selection, &timer0_delay);
-	timer1 = new_Timer(&timer1_selection, &timer1_delay);
-	Timer_on(timer1);
+	timer0 = new_Timer(TIMER0, 300);
+	timer1 = new_Timer(TIMER1, 10000);
+	timer1.on(&timer1);
 	
-	tempSensor = new_TempSensor(&temp_PIN);*/
+	//tempSensor = new_TempSensor(&temp_PIN);
 	
 	init_serial();
 	return;

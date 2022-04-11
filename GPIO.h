@@ -2,7 +2,7 @@
 #ifndef GPIO_H_
 #define GPIO_H_
 
-/* Inkluderingsdirektiv: */
+// Inkluderingsdirektiv:
 #include "definitions.h"
 
 /******************************************************************************
@@ -42,7 +42,7 @@ typedef struct Button
 	void (*disable_interrupt)(struct Button*);
 } Button;
 
-/* Funktionsdeklarationer: */
+// Funktionsdeklarationer:
 Led new_Led(uint8_t PIN); 
 Button new_Button(uint8_t PIN); 
 
