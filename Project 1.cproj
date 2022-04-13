@@ -141,6 +141,12 @@
     <Compile Include="definitions.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="DynamicTimer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="DynamicTimer.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="GPIO.h">
       <SubType>compile</SubType>
     </Compile>

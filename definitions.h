@@ -38,13 +38,16 @@
 * ASSIGN - Tilldelar nytt värde, ettställer specifik bit
 * SET - Ettställer samtliga bitar i register.
 * CLEAR - Nollställer samtliga bitar i register.
+*
+* Avkommenterade då de inte används.
 ******************************************************************************/
+/*
 #define SET_BIT(REGISTER, BIT) REGISTER |= (1 << BIT)
 #define CLEAR_BIT(REGISTER, BIT) REGISTER &= ~(1 << BIT)
 #define READ_BIT(REGISTER, BIT) (REGISTER & (1 << BIT))
 #define ASSIGN(REGISTER, BIT) REGISTER = (1 << BIT) 
 #define SET(REGISTER) REGISTER = 0xFF 
-#define CLEAR(REGISTER) REGISTER = 0x00
+#define CLEAR(REGISTER) REGISTER = 0x00*/
 
 // Typdefinitioner:
 typedef enum { false, true } bool;
