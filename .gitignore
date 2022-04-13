@@ -1,6 +1,6 @@
 # Prerequisites
 *.d
-
+*.atsuo
 # Object files
 *.o
 *.ko
