@@ -130,7 +130,7 @@ static void DynamicTimer_update(DynamicTimer* self)
 	self->timer.required_interrupts = self->interrupt_vector.average(&self->interrupt_vector);
 	serial_print("--------------------------------------------------------\n");
 	serial_print("Dynamic timer updated!\n");
-	DynamicTimer_print(self);
+	self->print(self);
 	
 	return;
 } // End of function update

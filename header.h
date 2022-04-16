@@ -6,14 +6,15 @@
 #include "definitions.h"
 #include "GPIO.h" 
 #include "Timer.h"
+#include "DynamicTimer.h"
 #include "Serial.h"
 #include "ADC.h"
 
 // Globala variabler:
-Led led1; 
+Display display1, display2; 
 Button button; 
-Timer timer0;
-Timer timer1; 
+Timer timer0, timer2;
+DynamicTimer timer1; 
 TempSensor tempSensor;
 
 // Funktionsdeklarationer:

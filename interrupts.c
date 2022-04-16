@@ -19,9 +19,8 @@ ISR (PCINT0_vect)
 	
 	if (button.is_pressed(&button))
 	{
-		timer1.clear(&timer1);
-		tempSensor.print_temperature(&tempSensor);		
-		led1.toggle(&led1);	
+		timer1.update(&timer1);
+		tempSensor.print_temperature(&tempSensor);			
 	}
 	
 	return;
@@ -64,7 +63,6 @@ ISR (TIMER1_COMPA_vect)
 	if (timer1.elapsed(&timer1))
 	{
 		tempSensor.print_temperature(&tempSensor);
-		led1.toggle(&led1);
 	}
 	return;
 }

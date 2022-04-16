@@ -261,7 +261,7 @@ static void init_timer(const TimerSelection timerSelection)
 * utgörs av specificerad fördröjningstid mätt i millisekunder. Antalet avbrott
 * som krävs för aktuell fördröjning beräknas som kvoten av specificerad 
 * fördröjningstid genom tiden mellan varje avbrott, vilket i detta fall är
-* satt till 0.016 ms, här implementerat via makrot INTERRUPT_TIME. Antalet
+* satt till 1.024 ms, här implementerat via makrot INTERRUPT_TIME. Antalet
 * avbrott som krävs för specificerad fördröjningstid avrundas till närmaste
 * heltal via anrop av funktionen round_to_integer och returneras sedan.
 ******************************************************************************/

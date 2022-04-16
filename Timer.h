@@ -5,45 +5,18 @@
 #include "definitions.h"
 
 /******************************************************************************
-* Vid initiering sätts timerkretsar Timer 0 - 2 till att räkna upp utan
-* prescaler, vilket innebär en uppräkningsfrekvens på 16 MHz, som motsvarar en
-* uppräkningshastighet på 62.5 us. Därmed tar det 256 * 62.5u = 0.016 ms mellan
-* varje timergenererat avbrott för en given timer när denna är aktiverad, då
-* samtliga timerkretsar sätts till att räkna upp till 256, då avbrott sker och
-* timerkretsen nollställs (automatiskt för Timer 0 samt Timer 2, då overflow
-* sker för dessa 8-bitars timerkretsar, medan Timer 1 i stället nollställs av 
-* hårdvaran i CTC Mode, då denna uppgår till 16-bitar och därmed är långt från
-* full vid uppräkning till 256).
-*
-* För att initiera timerkrets Timer 0 utan prescaler i Normal Mode så ettställs
-* biten CS00 (Clock Select 0 bit 0) i kontrollregistret TCCR0B (Timer/Counter
-* Control Register 0B). Därmed sätts uppräkningsfrekvensen till 16 MHz. 
-*
-* För att initiera timerkrets Timer 1 utan prescaler i CTC Mode, så att avbrott 
-* sker vid ett lägre värde än när overflow sker, vilket annars sker vid 
-* uppräkning till 65 536 för en 16-bitars räknare, så ettställs bitar CS10 
-* (Clock Select 1 bit 0) samt WGM12 (Waveform Generator Mode 2 bit 2) i 
-* kontrollregistret TCCR1B (Timer/Counter Control Register 1B). CS10 används 
-* för att ställa in uppräkningsfrekvensen utan prescaler (16 MHz), medan WGM12 
-* används för att Timer 1 skall arbeta i CTC Mode i stället för Normal Mode.
-* För att ställa in att timergenererat avbrott skall ske på Timer 1 vid 
-* uppräkning till 256, såsom övriga timerkretsar, så skrivs detta heltal till
-* registret OCR1A (Output Compare Register 1A). Vid uppräkning till 256 sker
-* då ett CTC-avbrott och Timer 1 nollställs av hårdvaran. Detta måste göras
-* vid initiering av Timer 1.
-*
-* För att initiera timerkrets Timer 2 utan prescaler i Normal Mode så ettställs
-* biten CS20 (Clock Select 2 bit 0) i kontrollregistret TCCR2B (Timer/Counter
-* Control Register 2B). Därmed sätts uppräkningsfrekvensen till 16 MHz, precis
-* som för Timer 0. Dessa register uppgår båda till 8-bitar, vilket alltså
-* medför overflow vid uppräkning till 256.
+* Makron för initiering av timerkretsat 0-2 med en prescaler på 64. 
+* Tuner 1 som är en 16 bitars timer begränsas via OCR1A registret till att ha
+* samma uppräkning som timer 0 & 2.
+* Detta medför att avbrott genereras var 1.024 ms. Enligt följande uträkning
+* ((16M/64)^-1 * 256)
 ******************************************************************************/
-#define INIT_TIMER0 TCCR0B = (1<<CS00)
-#define INIT_TIMER1 TCCR1B = (1<<CS10)|(1<<WGM12)
-#define INIT_TIMER2 TCCR2B = (1<<CS20)
+#define INIT_TIMER0 TCCR0B = (1<<CS01)|(1<<CS00)
+#define INIT_TIMER1 TCCR1B = (1<<CS11)|(1<<CS10)|(1<<WGM12)
+#define INIT_TIMER2 TCCR2B = (1<<CS22)
 
 #define SET_TIMER1_LIMIT OCR1A = 256
-#define INTERRUPT_TIME 0.016f
+#define INTERRUPT_TIME 1.024f
 
 /******************************************************************************
 * För att aktivera Timer 0 i Normal Mode ettställs biten TOIE0 (Timer/Counter

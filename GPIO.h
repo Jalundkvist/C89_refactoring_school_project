@@ -6,19 +6,19 @@
 #include "definitions.h"
 
 /******************************************************************************
-* Strukten Led används för implementering av lysdioder, som kan placeras på
+* Strukten Display används för implementering av lysdioder, som kan placeras på
 * någon av digitala PINs 0 - 13 på Arduino Uno. 
 * Varje lysdiod kan tändas, släckas och togglas.
 ******************************************************************************/
-typedef struct Led
+typedef struct Display
 {
 	uint8_t PIN;
 	bool enabled;
 	IO_port io_port;
-	void (*on)(struct Led*);
-	void (*off)(struct Led*);
-	void (*toggle)(struct Led*);
-}Led;
+	void (*on)(struct Display*);
+	void (*off)(struct Display*);
+	void (*toggle)(struct Display*);
+}Display;
 
 /******************************************************************************
 * Strukten Button används för implementering av tryckknappar, som kan placeras 
@@ -43,7 +43,7 @@ typedef struct Button
 } Button;
 
 // Funktionsdeklarationer:
-Led new_Led(uint8_t PIN); 
+Display new_Display(uint8_t PIN); 
 Button new_Button(uint8_t PIN); 
 
 #endif /* GPIO_H_ */

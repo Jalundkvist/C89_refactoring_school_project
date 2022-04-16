@@ -156,7 +156,7 @@
     <Compile Include="interrupts.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Led.c">
+    <Compile Include="display.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">
