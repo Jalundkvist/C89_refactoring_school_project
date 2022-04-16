@@ -1,12 +1,12 @@
 // Inkluderingsdirektiv:
 #include "GPIO.h"
 
-static void Led_on(Led* self);
-static void Led_off(Led* self);
-static void Led_toggle(Led* self);
+static void Display_on(Display* self);
+static void Display_off(Display* self);
+static void Display_toggle(Display* self);
 
 /******************************************************************************
-* Funktionen new_Led utgör initieringsrutin för objekt av strukten Led.
+* Funktionen new_Display utgör initieringsrutin för objekt av strukten Led.
 * Ingående argument PIN utgör aktuellt PIN-nummer sett till Arduino Uno
 * (PIN 0 - 13), som är ekvivalent med följande:
 *
@@ -17,7 +17,7 @@ static void Led_toggle(Led* self);
 *******************************************************************************
 *
 * Objektet lagras på den tillfälliga variabeln self. 
-* Om aktuellt PIN-nummer ligger mellan 0 - 7, så är lysdioden ansluten till 
+* Om aktuellt PIN-nummer ligger mellan 0 - 7, så är displayen ansluten till 
 * I/O-port D, vilket lagras via instansvariabeln io_port.
 * Aktuellt PORT-nummer är då samma samma som PIN-numret, vilket lagras
 * via instansvariabel PIN. Denna PIN sätts till utport genom att
@@ -34,9 +34,9 @@ static void Led_toggle(Led* self);
 * Slutligen sätts pekarna till att peka på motsvarande funktioner, följt
 * av att det nu initierade objektet returneras.
 ******************************************************************************/
-Led new_Led(uint8_t PIN)
+Display new_Display(uint8_t PIN)
 {
-	Led self;
+	Display self;
 	self.enabled = false;
 	self.PIN = PIN;
 	
@@ -52,18 +52,18 @@ Led new_Led(uint8_t PIN)
 		self.io_port = IO_PORTB;
 		DDRB |= (1 << self.PIN);
 	}
-	self.on = Led_on;
-	self.off = Led_off;
-	self.toggle = Led_toggle;
+	self.on = Display_on;
+	self.off = Display_off;
+	self.toggle = Display_toggle;
 	 return self;
 }
 
 /******************************************************************************
-* Funktionen Led_on används för att tända en lysdiod. Ingående argument self
-* utgör en pekare till led-objektet i fråga. Utefter aktuell I/O-port så 
+* Funktionen Display_on används för att tända en display. Ingående argument self
+* utgör en pekare till display-objektet i fråga. Utefter aktuell I/O-port så 
 * ettställs motsvarande bit i register PORTB eller PORTD.
 ******************************************************************************/
-void Led_on(Led* self)
+void Display_on(Display* self)
 {
 	if (self->io_port == IO_PORTB)
 	{
@@ -80,11 +80,11 @@ void Led_on(Led* self)
 }
 
 /******************************************************************************
-* Funktionen Led_off används för att släcka en lysdiod. Ingående argument
-* self utgör en pekare till lysdioden. Utefter aktuell I/O-port så nollställs
-* motsvarande bit i register PORTB eller PORTD.
+* Funktionen Display_off används för att släcka en display. Ingående argument
+* self utgör en pekare till 7 segment displayen. Utefter aktuell I/O-port så 
+* nollställs motsvarande bit i register PORTB eller PORTD.
 ******************************************************************************/
-void Led_off(Led* self)
+void Display_off(Display* self)
 {
 	if (self->io_port == IO_PORTB)
 	{
@@ -101,12 +101,12 @@ void Led_off(Led* self)
 }
 
 /******************************************************************************
-* Funktionen Led_toggle används för att toggla en lysdiod. För att genomföra
-* detta undersöks medlemmen enabled. Om denna är true så är lysdioden tänd
-* och då släcks lysdioden via anrop av funktionen Led_off (via pekaren off).
-* Annars så tänds lysdioden via anrop av funktionen Led_on (via pekaren on).
+* Funktionen Display_toggle används för att toggla en display. För att genomföra
+* detta undersöks medlemmen enabled. Om denna är true så är displayen tänd
+* och då släcks displayen via anrop av funktionen Display_off (via pekaren off).
+* Annars så tänds displayen via anrop av funktionen Display_on (via pekaren on).
 ******************************************************************************/
-void Led_toggle(Led* self)
+void Display_toggle(Display* self)
 {
 	if (self->enabled)
 	{
