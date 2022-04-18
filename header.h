@@ -11,11 +11,12 @@
 #include "ADC.h"
 
 // Globala variabler:
-Display display1, display2; 
+Display display;
 Button button; 
 Timer timer0, timer2;
 DynamicTimer timer1; 
 TempSensor tempSensor;
+
 
 // Funktionsdeklarationer:
 void setup(void);

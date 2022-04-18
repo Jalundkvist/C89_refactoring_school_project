@@ -216,7 +216,7 @@ static void Timer_set(Timer* self, const uint32_t delay_time)
 
 /******************************************************************************
 * Funktionen init_timer används för att initiera en given timerkrets för en
-* uppräkningstid där ett avbrott sker var 0.016:e millisekund vid uppräkning
+* uppräkningstid där ett avbrott sker var 1.024:e millisekund vid uppräkning
 * till 256, då overflow- eller CTC-avbrott sker, beroende på använd timerkrets. 
 * Ingående argument timerSelection indikerar vilken timer som skall initieras.
 *

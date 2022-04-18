@@ -53,6 +53,8 @@
 typedef enum { false, true } bool;
 typedef enum { IO_PORTB, IO_PORTC, IO_PORTD } IO_port; 
 typedef enum { TIMER0, TIMER1, TIMER2 } TimerSelection;
+typedef enum { DIGIT1, DIGIT2 } CurrentDigit;
+typedef enum { DISPLAY1, DISPLAY2} CurrentDisplay;
 //typedef enum { INT, DOUBLE, SIZE_T, CHAR } DataType;  //(Val av datatyp för vektor. - ej aktuell)
 
 #endif /* DEFINITIONS_H_ */

@@ -5,6 +5,7 @@
 static void print_temperature(TempSensor* self);
 static uint16_t ADC_read(TempSensor* self);
 static void init_ADC(void);
+static uint8_t get_temperature(TempSensor* self);
 
 /******************************************************************************
 * Funktionen new_TempSensor används för implementering av en temperatursensor 
@@ -17,9 +18,11 @@ TempSensor new_TempSensor(uint8_t PIN)
 {
 	TempSensor self;
 	self.PIN = PIN;
+	self.rounded_temp = 0x00;
 	init_ADC();
 	self.print_temperature = print_temperature;
 	self.ADC_read = ADC_read;
+	self.get_temperature = get_temperature;
 	return self;
 }
 
@@ -48,6 +51,7 @@ static void print_temperature(TempSensor* self)
 	const double Uin = VCC * (double)(ADC_result)/ADC_MAX;
 	const double temp = (100 * Uin - 50);
 	const int8_t rounded_temp = (int8_t)(temp + 0.5);
+	self->rounded_temp = rounded_temp;
 	serial_print_integer("Temperature: %d degrees Celcius\n", rounded_temp);
 	return;
 }
@@ -85,4 +89,10 @@ static void init_ADC(void)
 	ADCSRA = (1 << ADEN) | (1 << ADSC) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
 	while ((ADCSRA & (1 << ADIF)) == 0) ;
 	ADCSRA = (1 << ADIF);
+}
+
+static uint8_t get_temperature(TempSensor* self)
+{
+	uint8_t temp = self->rounded_temp;
+	return temp;
 }

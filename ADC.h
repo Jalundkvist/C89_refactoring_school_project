@@ -34,25 +34,28 @@
 #define WAIT_FOR_AD_CONVERSION_COMPLETE while ((ADCSRA & (1 << ADIF)) == 0) ;
 #define RESET_ADC_INTERRUPT_FLAG ADCSRA = (1 << ADIF)
 
-/******************************************************************************
-* Unionen Temperature används för att kunna justera mellan att lagra temperatur
-* avrundat till ett heltal eller som ett flyttal, där minne endast allokeras
-* för den datatyp som för tillfället används.
-******************************************************************************/
-union Temperature
-{
-	long rounded;
-	double non_rounded;
-};
+// /******************************************************************************
+// * Unionen Temperature används för att kunna justera mellan att lagra temperatur
+// * avrundat till ett heltal eller som ett flyttal, där minne endast allokeras
+// * för den datatyp som för tillfället används.
+// ******************************************************************************/
+// union Temperature
+// {
+// 	long rounded;
+// 	double non_rounded;
+// };									Union removed as it is not used.
 
 /******************************************************************************
 * Strukten TempSensor används för implementering av en temperatursensor
 * ansluten till en given analog PIN A0 - A5. 
+* Denna strukt lagrar den senast uppmäta temperatur i variabeln rounded_temp
+* för implementering av 7 segment display.
 ******************************************************************************/
 typedef struct TempSensor
 {
 	uint8_t PIN;
-	
+	uint8_t rounded_temp;
+	uint8_t (*get_temperature)(struct TempSensor* self);
 	void (*print_temperature)(struct TempSensor* self);
 	uint16_t (*ADC_read)(struct TempSensor* self);
 	
@@ -60,6 +63,7 @@ typedef struct TempSensor
 
 // Funktionsdeklarationer:
 TempSensor new_TempSensor(uint8_t PIN);
+
 
 
 #endif /* ADC_H_ */

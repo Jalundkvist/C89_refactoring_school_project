@@ -1,9 +1,12 @@
 // Inkluderingsdirektiv:
 #include "GPIO.h"
 
-static void Display_on(Display* self);
-static void Display_off(Display* self);
-static void Display_toggle(Display* self);
+static uint8_t Check_IO_port(uint8_t PIN);
+static void Display_on(Display* self, CurrentDisplay currentDisplay);
+static void Display_off(Display* self, CurrentDisplay currentDisplay);
+static void Display_enable(Display* self);
+static void Display_write(const uint8_t digit);
+static void Display_update_digit(Display* self, const uint8_t temp);
 
 /******************************************************************************
 * Funktionen new_Display utgör initieringsrutin för objekt av strukten Led.
@@ -34,28 +37,35 @@ static void Display_toggle(Display* self);
 * Slutligen sätts pekarna till att peka på motsvarande funktioner, följt
 * av att det nu initierade objektet returneras.
 ******************************************************************************/
-Display new_Display(uint8_t PIN)
+Display new_Display(uint8_t D1_PIN, uint8_t D2_PIN)
 {
 	Display self;
-	self.enabled = false;
-	self.PIN = PIN;
 	
-	if (self.PIN >= 0 && self.PIN <= 7) 
-	{
-		self.io_port = IO_PORTD;
-		DDRD |= (1 << self.PIN);
-	}
+	self.D1_PIN = Check_IO_port(D1_PIN);
+	self.D2_PIN = Check_IO_port(D2_PIN);
 	
-	else if (self.PIN >= 8 && self.PIN <= 13)
-	{
-		self.PIN = PIN - 8;
-		self.io_port = IO_PORTB;
-		DDRB |= (1 << self.PIN);
-	}
+	
+	self.currentDigit = DIGIT1;
+	
 	self.on = Display_on;
 	self.off = Display_off;
-	self.toggle = Display_toggle;
-	 return self;
+	self.enable = Display_enable;
+	self.update_digit = Display_update_digit;
+	self.enabled = true;
+	return self;
+}
+
+static uint8_t Check_IO_port(uint8_t PIN)
+{
+	if (PIN >= 0 && PIN <= 7)
+		return PIN;
+	
+	else if (PIN >= 8 && PIN <= 13)
+	{
+		PIN = PIN - 8;
+		DDRB |= (1 << PIN);
+	}
+	return PIN;
 }
 
 /******************************************************************************
@@ -63,19 +73,18 @@ Display new_Display(uint8_t PIN)
 * utgör en pekare till display-objektet i fråga. Utefter aktuell I/O-port så 
 * ettställs motsvarande bit i register PORTB eller PORTD.
 ******************************************************************************/
-void Display_on(Display* self)
+void Display_on(Display* self, CurrentDisplay current_display)
 {
-	if (self->io_port == IO_PORTB)
+	if (current_display == DISPLAY1)
 	{
-		PORTB |=  (1 << self->PIN);
+		PORTB |= (1<<self->D1_PIN);
+	}
+	else if (current_display == DISPLAY2)
+	{
+		PORTB |= (1<<self->D2_PIN);
 	}
 	
-	else if (self->io_port == IO_PORTD)
-	{
-		PORTD |= (1 << self->PIN);
-	}
 	
-	self->enabled = true;
 	return;	
 }
 
@@ -84,38 +93,97 @@ void Display_on(Display* self)
 * self utgör en pekare till 7 segment displayen. Utefter aktuell I/O-port så 
 * nollställs motsvarande bit i register PORTB eller PORTD.
 ******************************************************************************/
-void Display_off(Display* self)
+void Display_off(Display* self, CurrentDisplay current_display)
 {
-	if (self->io_port == IO_PORTB)
+	if (current_display == DISPLAY1)
 	{
-		PORTB &= ~(1<<self->PIN);
+		PORTB &= ~(1<<self->D1_PIN);
 	}
 	
-	else if (self->io_port == IO_PORTD)
+	else if (current_display == DISPLAY2)
 	{
-		PORTD &= ~(1<<self->PIN);
+		PORTB &= ~(1<<self->D2_PIN);
 	}
-	
-	self->enabled = false;
 	return;
 }
 
 /******************************************************************************
-* Funktionen Display_toggle används för att toggla en display. För att genomföra
+* Funktionen Display_enable används för att toggla en display. För att genomföra
 * detta undersöks medlemmen enabled. Om denna är true så är displayen tänd
 * och då släcks displayen via anrop av funktionen Display_off (via pekaren off).
 * Annars så tänds displayen via anrop av funktionen Display_on (via pekaren on).
 ******************************************************************************/
-void Display_toggle(Display* self)
+void Display_enable(Display* self)
 {
 	if (self->enabled)
 	{
-		self->off(self);
+		self->off(self, DISPLAY1);
+		self->off(self, DISPLAY2);
+		self->enabled = false;
 	}
 	
 	else
 	{
-		self->on(self);
+		self->enabled = true;
+	}
+	
+	return;
+}
+
+/*********************************************************************************************
+* Funktionen display_write används för att skriva ut en siffra 0 - 9 på en 7-segmentsdisplay.
+* Eftersom PIN 1 - 7 används för segmenten, samtidigt som alla makron är gjorda för PIN 0 - 6,
+* så skiftas bitarna i den binära koden ett steg åt vänster via bitvis skiftning.
+* Vid fel (om siffran överstiger nio, så släcks displayen).
+*********************************************************************************************/
+static void Display_write(const uint8_t digit)
+{
+	if (digit == 0) 
+		PORTD = (ZERO << 1);
+	else if (digit == 1) 
+		PORTD = (ONE << 1);
+	else if (digit == 2) 
+		PORTD = (TWO << 1);
+	else if (digit == 3) 
+		PORTD = (THREE << 1);
+	else if (digit == 4) 
+		PORTD = (FOUR << 1);
+	else if (digit == 5) 
+		PORTD = (FIVE << 1);
+	else if (digit == 6) 
+		PORTD = (SIX << 1);
+	else if (digit == 7) 
+		PORTD = (SEVEN << 1);
+	else if (digit == 8) 
+		PORTD = (EIGHT << 1);
+	else if (digit == 9) 
+		PORTD = (NINE << 1);
+	else PORTD = 0x00;
+	return;
+}
+
+static void Display_update_digit(Display* self, uint8_t temp)
+{
+	if (!self->enabled) return;
+	const uint8_t digit1 = temp/10;
+	const uint8_t digit2 = temp - (digit1 * 10);
+	
+	if (self->currentDigit == DIGIT1)
+		self->currentDigit = DIGIT2;
+	else
+		self->currentDigit = DIGIT1;
+		
+	if (self->currentDigit == DIGIT1)
+	{
+		self->on(self, DISPLAY1);
+		self->off(self, DISPLAY2);
+		Display_write(digit1);
+	}
+	else
+	{
+		self->on(self, DISPLAY2);
+		self->off(self, DISPLAY1);
+		Display_write(digit2);
 	}
 	
 	return;

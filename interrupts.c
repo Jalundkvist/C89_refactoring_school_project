@@ -20,7 +20,9 @@ ISR (PCINT0_vect)
 	if (button.is_pressed(&button))
 	{
 		timer1.update(&timer1);
-		tempSensor.print_temperature(&tempSensor);			
+		tempSensor.print_temperature(&tempSensor);
+		if (!timer2.enabled)
+			timer2.on(&timer2);
 	}
 	
 	return;
@@ -65,4 +67,11 @@ ISR (TIMER1_COMPA_vect)
 		tempSensor.print_temperature(&tempSensor);
 	}
 	return;
+}
+
+ISR (TIMER2_OVF_vect)
+{
+	display.update_digit(&display, tempSensor.rounded_temp);
+	return;
+		
 }
