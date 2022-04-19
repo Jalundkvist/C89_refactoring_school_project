@@ -34,17 +34,6 @@
 #define WAIT_FOR_AD_CONVERSION_COMPLETE while ((ADCSRA & (1 << ADIF)) == 0) ;
 #define RESET_ADC_INTERRUPT_FLAG ADCSRA = (1 << ADIF)
 
-// /******************************************************************************
-// * Unionen Temperature används för att kunna justera mellan att lagra temperatur
-// * avrundat till ett heltal eller som ett flyttal, där minne endast allokeras
-// * för den datatyp som för tillfället används.
-// ******************************************************************************/
-// union Temperature
-// {
-// 	long rounded;
-// 	double non_rounded;
-// };									Union removed as it is not used.
-
 /******************************************************************************
 * Strukten TempSensor används för implementering av en temperatursensor
 * ansluten till en given analog PIN A0 - A5. 

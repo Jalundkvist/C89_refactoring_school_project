@@ -87,6 +87,5 @@ static void init_timer(void)
 static void init_analog(void)
 {
 	tempSensor = new_TempSensor(1);
-	
 	return; 
 } // End of function init_analog
