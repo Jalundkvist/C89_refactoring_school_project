@@ -9,6 +9,7 @@
 #include "DynamicTimer.h"
 #include "Serial.h"
 #include "ADC.h"
+#include "watchdog.h"
 
 // Globala variabler:
 Display display;

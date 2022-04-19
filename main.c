@@ -10,10 +10,11 @@
 int main(void)
 {	
 	setup();
-
+	DISABLE_SERIAL_TRANSMISSION;
+	
     while (true)
 	{
-	
+	WDT_reset();
 	}
 	return 0;
 }
