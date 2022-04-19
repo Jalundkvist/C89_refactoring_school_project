@@ -7,6 +7,7 @@ static void Display_off(Display* self, CurrentDisplay currentDisplay);
 static void Display_enable(Display* self);
 static void Display_write(const uint8_t digit);
 static void Display_update_digit(Display* self, const uint8_t temp);
+static inline uint8_t get_MSB(const uint8_t digit);
 
 /******************************************************************************
 * Funktionen new_Display utgör initieringsrutin för objekt av strukten Led.
@@ -138,8 +139,12 @@ void Display_enable(Display* self)
 *********************************************************************************************/
 static void Display_write(const uint8_t digit)
 {
+	// #define ZERO 0x40 0100 0000
 	if (digit == 0) 
-		PORTD = (ZERO << 1);
+	{
+		PORTD = (ZERO << 2);
+		PORTB |= (1 << get_MSB(ZERO));
+	}
 	else if (digit == 1) 
 		PORTD = (ONE << 1);
 	else if (digit == 2) 
@@ -160,6 +165,15 @@ static void Display_write(const uint8_t digit)
 		PORTD = (NINE << 1);
 	else PORTD = 0x00;
 	return;
+}
+
+static inline uint8_t get_MSB(const uint8_t digit) // Ingående argument är ett makro ZERO - NINE. MSB för siffra är bit 6.
+{
+	const uint8_t number = digit & (1 << 6);
+	if (number) 
+		return 0x01;
+	else 
+	return 0x00;
 }
 
 static void Display_update_digit(Display* self, uint8_t temp)
