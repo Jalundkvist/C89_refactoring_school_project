@@ -7,7 +7,7 @@ static void Display_off(Display* self, CurrentDisplay currentDisplay);
 static void Display_enable(Display* self);
 static void Display_write(const uint8_t digit);
 static void Display_update_digit(Display* self, const uint8_t temp);
-static inline uint8_t get_MSB(const uint8_t digit);
+static inline void write_MSB(const uint8_t digit);
 
 /******************************************************************************
 * Funktionen new_Display utgör initieringsrutin för objekt av strukten Led.
@@ -142,38 +142,71 @@ static void Display_write(const uint8_t digit)
 	// #define ZERO 0x40 0100 0000
 	if (digit == 0) 
 	{
-		PORTD = (ZERO << 2);
-		PORTB |= (1 << get_MSB(ZERO));
+		PORTD = (uint8_t)(ZERO << 2);
+		write_MSB(ZERO);
 	}
-	else if (digit == 1) 
-		PORTD = (ONE << 1);
+	else if (digit == 1)
+	{
+		PORTD = (uint8_t)(ONE << 2);
+		write_MSB(ONE);
+	}
 	else if (digit == 2) 
-		PORTD = (TWO << 1);
+	{
+		PORTD = (TWO << 2);
+		write_MSB(TWO);
+	}	
 	else if (digit == 3) 
-		PORTD = (THREE << 1);
+	{
+		PORTD = (THREE << 2);
+		write_MSB(THREE);
+	}
 	else if (digit == 4) 
-		PORTD = (FOUR << 1);
+	{
+		PORTD = (FOUR << 2);
+		write_MSB(FOUR);
+	}	
 	else if (digit == 5) 
-		PORTD = (FIVE << 1);
+	{
+		PORTD = (FIVE << 2);
+		write_MSB(FIVE);
+	}	
 	else if (digit == 6) 
-		PORTD = (SIX << 1);
+	{
+		PORTD = (SIX << 2);
+		write_MSB(SIX);
+	}	
 	else if (digit == 7) 
-		PORTD = (SEVEN << 1);
+	{
+		PORTD = (uint8_t)(SEVEN << 2);
+		write_MSB(SEVEN);
+	}	
 	else if (digit == 8) 
-		PORTD = (EIGHT << 1);
+	{
+		PORTD = (EIGHT << 2);
+		write_MSB(EIGHT);
+	}	
 	else if (digit == 9) 
-		PORTD = (NINE << 1);
-	else PORTD = 0x00;
+	{
+		PORTD = (NINE << 2);
+		write_MSB(NINE);
+	}	
+	else 
+	{
+		PORTD = 0x00;
+		PORTB &= ~(1 << 0);
+	}
+	
 	return;
 }
 
-static inline uint8_t get_MSB(const uint8_t digit) // Ingående argument är ett makro ZERO - NINE. MSB för siffra är bit 6.
+static inline void write_MSB(const uint8_t digit) // Ingående argument är ett makro ZERO - NINE. MSB för siffra är bit 6.
 {
 	const uint8_t number = digit & (1 << 6);
 	if (number) 
-		return 0x01;
+		PORTB |= (1<<0);
 	else 
-	return 0x00;
+		PORTB &= ~(1<<0);
+	return;
 }
 
 static void Display_update_digit(Display* self, uint8_t temp)

@@ -73,5 +73,4 @@ ISR (TIMER2_OVF_vect)
 {
 	display.update_digit(&display, tempSensor.rounded_temp);
 	return;
-		
 }
