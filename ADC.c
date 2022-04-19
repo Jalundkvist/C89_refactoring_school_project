@@ -5,7 +5,6 @@
 static void print_temperature(TempSensor* self);
 static uint16_t ADC_read(TempSensor* self);
 static void init_ADC(void);
-static uint8_t get_temperature(TempSensor* self);
 
 /******************************************************************************
 * Funktionen new_TempSensor används för implementering av en temperatursensor 
@@ -22,7 +21,6 @@ TempSensor new_TempSensor(uint8_t PIN)
 	init_ADC();
 	self.print_temperature = print_temperature;
 	self.ADC_read = ADC_read;
-	self.get_temperature = get_temperature;
 	return self;
 }
 
@@ -74,7 +72,7 @@ static uint16_t ADC_read(TempSensor* self)
 	while ((ADCSRA & (1 << ADIF)) == 0) ;
 	ADCSRA = (1 << ADIF);
 	return ADC;
-}
+} // End of function ADC_read
 
  /******************************************************************************
 * Funktionen init_ADC används för att initiera AD-omvandlaren då första
@@ -89,10 +87,4 @@ static void init_ADC(void)
 	ADCSRA = (1 << ADEN) | (1 << ADSC) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
 	while ((ADCSRA & (1 << ADIF)) == 0) ;
 	ADCSRA = (1 << ADIF);
-}
-
-static uint8_t get_temperature(TempSensor* self)
-{
-	uint8_t temp = self->rounded_temp;
-	return temp;
-}
+} // End of function init_ADC

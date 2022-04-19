@@ -55,7 +55,6 @@ typedef struct TempSensor
 {
 	uint8_t PIN;
 	uint8_t rounded_temp;
-	uint8_t (*get_temperature)(struct TempSensor* self);
 	void (*print_temperature)(struct TempSensor* self);
 	uint16_t (*ADC_read)(struct TempSensor* self);
 	
