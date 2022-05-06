@@ -11,13 +11,13 @@
 * <stdio.h> Bibliotek för implementering av I/O i C.
 * <stdlib.h> C:s standardbibliotek.
 * <util/delay.h> Bibliotek för att generera fördröjning.
+*
+* <Byte.h> inaktuell headerfil för bithantering
 ******************************************************************************/
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-// Headerfil för inkludering av union för enkel bithantering. (borttagen då filen är inaktuell och ligger lagrad i mapp.)
 // #include "Byte.h" 
 
 /******************************************************************************

@@ -46,7 +46,7 @@ Button new_Button(uint8_t PIN)
 	self.enable_interrupt = Button_enable_interrupt;
 	self.disable_interrupt = Button_disable_interrupt;
 	return self;
-}
+} // End of function new_Button
 
 /******************************************************************************
 * Funktionen Button_is_pressed används för att indikera ifall en given 
@@ -68,7 +68,7 @@ static bool Button_is_pressed(Button* self)
 	}
 	
 	return false;	
-}
+} // End of function Button_is_pressed
 
 /******************************************************************************
 * Funktionen Button_enable_interrupt används för att aktivera PCI-avbrott på
@@ -103,7 +103,7 @@ static void Button_enable_interrupt(Button* self)
 	
 	self->interrupt_enabled = true;
 	return;
-}
+} // End of function Button_enable_interrupt
 
 /******************************************************************************
 * Funktionen Button_disable_interrupt används för att inaktivera avbrott för
@@ -126,4 +126,4 @@ static void Button_disable_interrupt(Button* self)
 	
 	self->interrupt_enabled = false;
 	return;
-}
+} // End of function Button_disable_interrupt

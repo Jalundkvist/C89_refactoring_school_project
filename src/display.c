@@ -19,8 +19,13 @@ static inline void write_MSB(const uint8_t digit);
 *     0 - 7                     D         Samma som PIN på Arduino Uno        *
 *     8 - 13                    B            PIN på Arduino Uno - 8           *
 *******************************************************************************
-*
 * 
+* För 7 segments displayer så fungerar koden enbart om D1_PIN och D2_PIN 
+* ligger mellan PIN 9-12 då övriga pins är upptagna.
+*
+* Returnerar ett objekt av strukten Display som kan hantera visa ett heltal
+* mellan 00 till 99 på 7 segmentsdisplayer kopplade i bokstavsföljd från
+* PIN 2-8 och display 1 till angiven D1_pin och display 2 till D2_pin.
 ******************************************************************************/
 Display new_Display(uint8_t D1_PIN, uint8_t D2_PIN)
 {
@@ -34,29 +39,31 @@ Display new_Display(uint8_t D1_PIN, uint8_t D2_PIN)
 	
 	self.on = Display_on;
 	self.off = Display_off;
-	self.enable = Display_enable;
 	self.update_digit = Display_update_digit;
 	self.enabled = true;
 	return self;
-}
+} // End of function new_Display.
 
+/******************************************************************************
+* Funktionen Check_IO_port kontrollerar vilken PIN som displayen ligger på.
+* Om PIN ligger på PORTB, PIN 9-12 så aktiveras korrekt PIN i DDRD
+* annars så returneras PIN utan att något data direction register ettställs.
+******************************************************************************/
 static uint8_t Check_IO_port(uint8_t PIN)
-{
-	if (PIN >= 0 && PIN <= 7)
-		return PIN;
-	
-	else if (PIN >= 8 && PIN <= 13)
+{	
+	if (PIN >= 9 && PIN <= 12)
 	{
 		PIN = PIN - 8;
 		DDRB |= (1 << PIN);
+		return PIN;
 	}
-	return PIN;
-}
+	else return PIN;
+} // End of function Check_IO_port
 
 /******************************************************************************
 * Funktionen Display_on används för att tända en display. Ingående argument self
-* utgör en pekare till display-objektet i fråga. Utefter aktuell I/O-port så 
-* ettställs motsvarande bit i register PORTB eller PORTD.
+* utgör en pekare till display-objektet i fråga och aktuell display. 
+* och tänder 
 ******************************************************************************/
 void Display_on(Display* self, CurrentDisplay current_display)
 {
@@ -68,15 +75,13 @@ void Display_on(Display* self, CurrentDisplay current_display)
 	{
 		PORTB |= (1<<self->D2_PIN);
 	}
-	
-	
 	return;	
-}
+} // End of function Display_on
 
 /******************************************************************************
 * Funktionen Display_off används för att släcka en display. Ingående argument
 * self utgör en pekare till 7 segment displayen. Utefter aktuell I/O-port så 
-* nollställs motsvarande bit i register PORTB eller PORTD.
+* nollställs motsvarande bit för port B.
 ******************************************************************************/
 void Display_off(Display* self, CurrentDisplay current_display)
 {
@@ -90,30 +95,7 @@ void Display_off(Display* self, CurrentDisplay current_display)
 		PORTB &= ~(1<<self->D2_PIN);
 	}
 	return;
-}
-
-/******************************************************************************
-* Funktionen Display_enable används för att toggla en display. För att genomföra
-* detta undersöks medlemmen enabled. Om denna är true så är displayen tänd
-* och då släcks displayen via anrop av funktionen Display_off (via pekaren off).
-* Annars så tänds displayen via anrop av funktionen Display_on (via pekaren on).
-******************************************************************************/
-void Display_enable(Display* self)
-{
-	if (self->enabled)
-	{
-		self->off(self, DISPLAY1);
-		self->off(self, DISPLAY2);
-		self->enabled = false;
-	}
-	
-	else
-	{
-		self->enabled = true;
-	}
-	
-	return;
-}
+} // End of function Display_off
 
 /*********************************************************************************************
 * Funktionen display_write används för att skriva ut en siffra 0 - 9 på en 7-segmentsdisplay.
@@ -186,7 +168,7 @@ static void Display_write(const uint8_t digit)
 	}
 	
 	return;
-}
+} // End of function Display_write.
 
 /*********************************************************************************************
 * Funktionen write_MSB läser av ingående tal som i detta program är 7 bitars tal.
@@ -202,8 +184,18 @@ static inline void write_MSB(const uint8_t digit)
 	else 
 		PORTB &= ~(1<<0);
 	return;
-}
+} // End of function write_MSB
 
+/*********************************************************************************************
+* Funktionen Display_update_digit.
+* Ingående argument: Display objekt, osignerat 8 bitars heltal.
+* Ingående tal för temperatur bryts up i två ental som ska representera tiotalet och entalet.
+*
+* Beroende på vilken display som har varit aktiv så skiftas aktuell display och beroende på
+* vilken display så skrivs första eller andra siffran ut till rätt display.
+*
+* Denna funktion anropas via avbrott genererat av timer.
+*********************************************************************************************/
 static void Display_update_digit(Display* self, uint8_t temp)
 {
 	if (!self->enabled) return;
@@ -227,6 +219,5 @@ static void Display_update_digit(Display* self, uint8_t temp)
 		self->off(self, DISPLAY1);
 		Display_write(digit2);
 	}
-	
 	return;
-}
+} // End of function Display_update_digit
