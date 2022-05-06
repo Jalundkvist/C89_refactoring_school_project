@@ -10,7 +10,7 @@ static void Display_update_digit(Display* self, const uint8_t temp);
 static inline void write_MSB(const uint8_t digit);
 
 /******************************************************************************
-* Funktionen new_Display utgör initieringsrutin för objekt av strukten Led.
+* Funktionen new_Display utgör initieringsrutin för objekt av strukten Display.
 * Ingående argument PIN utgör aktuellt PIN-nummer sett till Arduino Uno
 * (PIN 0 - 13), som är ekvivalent med följande:
 *
@@ -20,23 +20,7 @@ static inline void write_MSB(const uint8_t digit);
 *     8 - 13                    B            PIN på Arduino Uno - 8           *
 *******************************************************************************
 *
-* Objektet lagras på den tillfälliga variabeln self. 
-* Om aktuellt PIN-nummer ligger mellan 0 - 7, så är displayen ansluten till 
-* I/O-port D, vilket lagras via instansvariabeln io_port.
-* Aktuellt PORT-nummer är då samma samma som PIN-numret, vilket lagras
-* via instansvariabel PIN. Denna PIN sätts till utport genom att
-* motsvarande bit i datariktningsregister DDRD (Data Direction Register D)
-* ettställs. Bitvis OR |= används för att enbart ettställa aktuell bit utan 
-* att påverka övriga bitar.
 * 
-* Motsvarande genomförs ifall aktuellt PIN-nummer ligger mellan 8 - 13, med
-* skillnaden att I/O-porten då utgörs av I/O-port B, PIN-numret är lika med
-* erhållet PIN-nummer på Arduino Uno - 8, och motsvarande PIN sätts till
-* utport via ettställning av motsvarande bit i datariktningsregister DDRB
-* (Data Direction Register B).
-*
-* Slutligen sätts pekarna till att peka på motsvarande funktioner, följt
-* av att det nu initierade objektet returneras.
 ******************************************************************************/
 Display new_Display(uint8_t D1_PIN, uint8_t D2_PIN)
 {
@@ -133,13 +117,18 @@ void Display_enable(Display* self)
 
 /*********************************************************************************************
 * Funktionen display_write används för att skriva ut en siffra 0 - 9 på en 7-segmentsdisplay.
-* Eftersom PIN 1 - 7 används för segmenten, samtidigt som alla makron är gjorda för PIN 0 - 6,
-* så skiftas bitarna i den binära koden ett steg åt vänster via bitvis skiftning.
+* Eftersom PIN 2 - 8 används för segmenten, samtidigt som alla makron är gjorda för PIN 0 - 6,
+* så skiftas den binära koden två steg åt vänster via bitvis skiftning.
 * Vid fel (om siffran överstiger nio, så släcks displayen).
+*
+* Då PIN 8 ligger på port B så används funktionen write_MSB för att tända segmentet kopplat
+* till PIN 8 ifall MSB är ett tal, annars så stängs PIN 8 av.
+*
+* Typecasts till uint8_t används för att motverka varningsmeddelande för trunkering vid
+* bitvis skiftning.
 *********************************************************************************************/
 static void Display_write(const uint8_t digit)
 {
-	// #define ZERO 0x40 0100 0000
 	if (digit == 0) 
 	{
 		PORTD = (uint8_t)(ZERO << 2);
@@ -199,9 +188,15 @@ static void Display_write(const uint8_t digit)
 	return;
 }
 
-static inline void write_MSB(const uint8_t digit) // Ingående argument är ett makro ZERO - NINE. MSB för siffra är bit 6.
+/*********************************************************************************************
+* Funktionen write_MSB läser av ingående tal som i detta program är 7 bitars tal.
+* MSB läses av och lagras på variabeln number. PIN 8 aktiveras ifall number är ett tal, 
+* annars avaktiveras PIN 8.
+*********************************************************************************************/
+static inline void write_MSB(const uint8_t digit)
 {
 	const uint8_t number = digit & (1 << 6);
+	
 	if (number) 
 		PORTB |= (1<<0);
 	else 

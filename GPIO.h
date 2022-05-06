@@ -1,4 +1,3 @@
-
 #ifndef GPIO_H_
 #define GPIO_H_
 
@@ -26,7 +25,7 @@
 
 /******************************************************************************
 * Strukten Display används för implementering av 7 segmentsdisplay, som bör
-* placeras på någon av digitala PINs 8 - 13 (PORTB) på Arduino Uno. 
+* placeras på någon av digitala PINs 9 - 12 (PORTB) på Arduino Uno. 
 * Varje display kan tändas, släckas och togglas.
 ******************************************************************************/
 typedef struct Display

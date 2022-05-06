@@ -116,3 +116,16 @@ void write_byte(char data)
 	UDR0 = data;
 	return;
 }
+
+
+/******************************************************************************
+* Funktion disable_serial inaktiverar seriell transmission ifall ingående
+* parameter är true, annars aktiveras seriell transmission 
+******************************************************************************/
+void disable_serial(bool choice)
+{
+	if (choice) DISABLE_SERIAL_TRANSMISSION;
+	else ENABLE_SERIAL_TRANSMISSION;	
+
+    return;
+}

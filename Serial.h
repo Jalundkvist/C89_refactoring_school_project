@@ -54,5 +54,6 @@ void serial_print(char* s);
 void serial_print_integer(char* s, int32_t number);
 void serial_print_unsigned(char* s, uint32_t number);
 void write_byte(char data);
+void disable_serial(bool choice);
 
 #endif /* SERIAL_H_ */

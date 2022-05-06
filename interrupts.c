@@ -55,8 +55,7 @@ ISR (TIMER0_OVF_vect)
 * rumstemperaturen var 60:e sekund, alternativt 60 sekunder efter senaste
 * knapptryckning. Varje gång denna rutin aktiveras så räknas antalet exekverade 
 * avbrott upp. När tillräckligt många avbrott har ägt rum så att timern har löpt 
-* ut, så mäts rumstemperaturen och skrivs ut i terminalen. För att indikera att 
-* temperaturmätning genomförs så togglas lysdioden. 
+* ut, så mäts rumstemperaturen och skrivs ut i terminalen.
 ******************************************************************************/
 ISR (TIMER1_COMPA_vect)
 {
