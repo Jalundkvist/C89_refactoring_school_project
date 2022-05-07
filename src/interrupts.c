@@ -9,8 +9,7 @@
 * multipla avbrott äger rum kort efter varandra när knappen studsar. Timer 0
 * aktiveras för att efter 300 ms återaktivera PCI-avbrott på PIN 13. Ifall
 * nedtryckning av tryckknappen orsakade aktuellt avbrott, så mäts aktuell
-* rumstemperatur och skrivs ut i en seriell terminal. För att indikera att
-* temperaturavläsning genomförs så togglas led1. Samtidigt nollställs Timer 1.
+* rumstemperatur och skrivs ut i en seriell terminal. . Samtidigt nollställs Timer 1. ----------
 ******************************************************************************/
 ISR (PCINT0_vect)
 {
@@ -29,10 +28,10 @@ ISR (PCINT0_vect)
 }
 
 /******************************************************************************
-* Avbrottsrutin för Timer 0 i Normal Mode, vilket sker var 0.016:e millisekund
+* Avbrottsrutin för Timer 0 i Normal Mode, vilket sker var 1.024:e millisekund
 * då timern i fråga är aktiverad. Denna avbrottsrutin används för att generera 
-* en bouncetid på 300 ms, där PCI-avbrott på PIN 13 hålls inaktiverat efter ett 
-* givet avbrott för att förhindra att multipla äger rum på grund av 
+* en de-bouncetid på 300 ms, där PCI-avbrott på PIN 13 hålls inaktiverat efter 
+* ett givet avbrott för att förhindra att multipla äger rum på grund av 
 * kontakstudsar. När tillräckligt många avbrott har ägt rum så att timern har 
 * löpt ut, så inaktiveras Timer 0 och PCI-avbrott på PIN 13 återaktiveras.
 ******************************************************************************/
@@ -50,8 +49,8 @@ ISR (TIMER0_OVF_vect)
 }
 
 /******************************************************************************
-* Avbrottsrutin för Timer 1 i CTC Mode, vilket sker var 0.016:e millisekund då
-* timern i fråga är aktiverad. Denna avbrottsrutin används för att mäta
+* Avbrottsrutin för Timer 1 i CTC Mode, vilket sker var 1.024:e millisekund då 
+* timern i fråga är aktiverad. Denna avbrottsrutin används för att mäta <-----------------
 * rumstemperaturen var 60:e sekund, alternativt 60 sekunder efter senaste
 * knapptryckning. Varje gång denna rutin aktiveras så räknas antalet exekverade 
 * avbrott upp. När tillräckligt många avbrott har ägt rum så att timern har löpt 
@@ -67,8 +66,10 @@ ISR (TIMER1_COMPA_vect)
 	}
 	return;
 }
-
-ISR (TIMER2_OVF_vect)
+/******************************************************************************
+* 
+******************************************************************************/
+ISR (TIMER2_OVF_vect) // <-----------
 {
 	display.update_digit(&display, tempSensor.rounded_temp);
 	return;

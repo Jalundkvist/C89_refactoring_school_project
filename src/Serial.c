@@ -121,6 +121,9 @@ void write_byte(char data)
 /******************************************************************************
 * Funktion disable_serial inaktiverar seriell transmission ifall ingående
 * parameter är true, annars aktiveras seriell transmission 
+*
+* Inparameter	: Bool(true/false).
+* returnerar	: --
 ******************************************************************************/
 void disable_serial(bool choice)
 {

@@ -1,8 +1,10 @@
 #ifndef WATCHDOG_H_
 #define WATCHDOG_H_
 
+// Inkluderingsdirektiv: 
 #include "definitions.h"
 
+// Makrodefinitioner:
 #define _512MS ((1 << WDP2) | (1 << WDP0))
 #define _1S  ((1<< WDP2) | (1 << WDP1))
 #define _2S  ((1 << WDP2) | (1 << WDP1) | (1 << WDP0))

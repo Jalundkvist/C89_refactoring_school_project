@@ -10,6 +10,20 @@
 // Makro för begränsning av capacity:
 #define MAX_CAPACITY 100
 
+/******************************************************************************
+* Strukten DynamicTimer används för att skriva ut temperaturen med hjälp av
+* en genomsnittlig tid som tas fram genom att räkna antal avbrott mellan
+* knapptryckningar. När vektorn är full så byter den ut äldst värde och 
+* varje knapptryck uppdaterar objektet "timer"s variabel "required_interrupts"
+* Som i följd ändrar hur ofta temperaturen mäts/skrivs ut till 7segments
+* displayer eller seriell monitor.
+* 
+* Objektet DynamicTimer innehåller wrapperfunktioner som använder sig av 
+* funktioner som återfinns i andra objekt.
+* Den dynamiska timern använder sig av två objekt utanför denna fil.
+* Den första är ett objekt från strukten Timer döpt timer och den andra från
+* strukten Vector döpt interrupt_vector.
+******************************************************************************/
 typedef struct DynamicTimer
 {
 	Timer timer;
