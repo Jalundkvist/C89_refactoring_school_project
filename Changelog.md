@@ -52,8 +52,6 @@ Serial file changes
 		4.2 Button
 		4.3 Led
 	
-	
-Led changes.
 5. Troubleshooting LED struct.
 
 		5.1 Updated struct
@@ -77,7 +75,7 @@ Led changes.
 
 		7.1 Macro: DISABLE_TIMER1, incorrect. Cleared TIMSK0 instead of TIMSK1.
 		7.2 Macro: INIT_TIMER1 was incorrect, missed setting CS10 AND WGM12.
-				Used only WGM11 which is used for PWM-mode.
+		Used only WGM11 which is used for PWM-mode.
 		7.3 BIT-macro removed.
 		7.4 Updated struct
 		7.5 Updated files using timer functions.
@@ -91,10 +89,10 @@ Led changes.
 		8.3 ADDED: Function init_ADC to initialize the AD-converter
 		8.4 BIT-macro removed.
 		8.5 CHANGED: print_temperature now holds variables instead of ADC struct.
-								 As the variables are not needed after print and variables are freed from stack.
+		As the variables are not needed after print and variables are freed from stack.
 
 		Program is now completely updated from C89 to C99.
-		
+	**********************************************************************************	
 	TODO: Improvements.
 
 		-> Add vector struct
@@ -112,7 +110,7 @@ Led changes.
 		10.1 DynamicTimer uses Timer and Vector struct
 		10.2 Updated interrupts and setup file to use DynamicTimer for timer1.
 		10.3 Timing for temperature reading now updates dynamically depending on
-				 the average time between actuations of button on PIN 13.
+		the average time between actuations of button on PIN 13.
 	
 11. Added struct for 7-segment displays.
 
