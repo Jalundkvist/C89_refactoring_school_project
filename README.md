@@ -36,3 +36,16 @@ För ändringar som har utförts från originalkoden som var skriven i C89, se -
  Därefter är allt styrt via avbrottsrutiner där main loop som kontinuerligt
  återställer räknaren för Watchdog-timern så länge programmet exekverar
  normalt.
+ 
+ 7 segmentsdisplayerna fungerar på ett sådant sätt att dom skiftar mellan
+ display 1 och display 2 varje millesekund samtidigt som PIN 2-8 skiftar
+ värden för att representera rätt värde på displayen.
+
+ *****************************************************************************
+ 
+			 PINS USED ON ARDUINO UNO
+			 PIN 2-8 for 7seg segments
+			 PIN 10  for first  digit
+			 PIN 11  for second digit
+			 PIN 13  for button
+			 PIN A1  for tmp36 sensor
