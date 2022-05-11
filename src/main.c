@@ -1,53 +1,53 @@
 /******************************************************************************
-*								Skolprojekt									  *
-* Felsök och uppdatera en befintlig C-kod från C89 till C99 och optimera	  *
-* koden.																	  *
-*																			  *
-* Extra: Lägg till funktionalitet så som, WDT, 7seg, vector, dynamisk timer,  *
-*		 EEPROM																  *
-* Implementerat:  Watchdog, 7-segmentsdisplay, Vector, Dynamisk timer.		  *
+*				Skolprojekt
+* FelsÃ¶k och uppdatera en befintlig C-kod frÃ¥n C89 till C99 och optimera
+* koden.
+*
+* Extra: LÃ¤gg till funktionalitet sÃ¥ som, WDT, 7seg, vector, dynamisk timer,
+*	EEPROM
+* Implementerat:  Watchdog, 7-segmentsdisplay, Vector, Dynamisk timer.
 *******************************************************************************
-* Innan så exekverade inte koden på grund av flera fel.						  *
-* Makron som var feldefinierade och andra makron som användes på fel ställen. *
-* Felaktiga beräkningar korrigerades										  *
-*																			  *
-* Programmet var tänkt att skriva ut temperatur seriellt var 60:e sekund.	  *
-* Om knapp på PIN 13 trycktes ner så återställdes timern samtidigt som        *
-* temperaturen skrevs ut seriellt.											  *
-* Vid varje utskrift så togglades en lysdiod för indikation av att avläsning  *
-* har ägt rum.																  *
+* Innan sÃ¥ exekverade inte koden pÃ¥ grund av flera fel.
+* Makron som var feldefinierade och andra makron som anvÃ¤ndes pÃ¥ fel stÃ¤llen.
+* Felaktiga berÃ¤kningar korrigerades
+*
+* Programmet var tÃ¤nkt att skriva ut temperatur seriellt var 60:e sekund.
+* Om knapp pÃ¥ PIN 13 trycktes ner sÃ¥ Ã¥terstÃ¤lldes timern samtidigt som
+* temperaturen skrevs ut seriellt.
+* Vid varje utskrift sÃ¥ togglades en lysdiod fÃ¶r indikation av att avlÃ¤sning
+* har Ã¤gt rum.
 *******************************************************************************
-* I det uppdaterade programmet så har  delar av koden slopats då de inte      *
-* hade något användningsområde i den uppdaterade koden.						  *
-*																			  *
-* Borttagna filer: MemoryBlock.h, MemoryBlock.c, Byte.h, Byte.c			      *
-*																			  *
-* En LED har bytts ut mot två stycken 7-segments displayer som visar aktuell  *
-* temperatur efter att en dynamisk timer aktiveras via tryckknapp på PIN 13.  *
-* Den dynamiska timern håller upp till 10 värden som sparar tiden mellan	  *
-* varje tryckknapp. Summan av all tid divideras med det antalet tider som har *
-*  sparats (upp till 10 värden).											  *
-*																			  *
-* Seriell överföring inaktiveras efter initieringsrutinen har gjort sitt.	  *
-* Därefter är allt styrt via avbrottsrutiner där main loop som kontinuerligt  *
-* återställer räknaren för Watchdog-timern så länge programmet exekverar	  *
-* normalt.																	  *
+* I det uppdaterade programmet sÃ¥ har  delar av koden slopats dÃ¥ de inte
+* hade nÃ¥got anvÃ¤ndningsomrÃ¥de i den uppdaterade koden.
+*
+* Borttagna filer: MemoryBlock.h, MemoryBlock.c, Byte.h, Byte.c	
+*
+* En LED har bytts ut mot tvÃ¥ stycken 7-segments displayer som visar aktuell
+* temperatur efter att en dynamisk timer aktiveras via tryckknapp pÃ¥ PIN 13.
+* Den dynamiska timern hÃ¥ller upp till 10 vÃ¤rden som sparar tiden mellan
+* varje tryckknapp. Summan av all tid divideras med det antalet tider som har
+*  sparats (upp till 10 vÃ¤rden).
+*
+* Seriell Ã¶verfÃ¶ring inaktiveras efter initieringsrutinen har gjort sitt.
+* DÃ¤refter Ã¤r allt styrt via avbrottsrutiner dÃ¤r main loop som kontinuerligt
+* Ã¥terstÃ¤ller rÃ¤knaren fÃ¶r Watchdog-timern sÃ¥ lÃ¤nge programmet exekverar
+* normalt.
 ******************************************************************************/
 
 // Inkluderingsdirektiv:
 #include "header.h"
 
 /******************************************************************************
-* Funktionen main utgör programmets start- och slutpunkt. Programmets globala
+* Funktionen main utgÃ¶r programmets start- och slutpunkt. Programmets globala
 * variabler initieras via anrop av funktionen setup. Efter att setup-rutinen
-* har körts så avaktiveras seriell överföring via funktionen disable_serial
-* då temperaturen går att avläsa på 7 segmentsdisplayer.
+* har kÃ¶rts sÃ¥ avaktiveras seriell Ã¶verfÃ¶ring via funktionen disable_serial
+* dÃ¥ temperaturen gÃ¥r att avlÃ¤sa pÃ¥ 7 segmentsdisplayer.
 *
-* En while-loop används för att hålla programmet igång och för att återställa 
-* Watchdog-timern via WD_reset så länge matningsspänning tillförs.
-* Om programmet fastnar i exekvering utanför mainloop så återställs programmet.
+* En while-loop anvÃ¤nds fÃ¶r att hÃ¥lla programmet igÃ¥ng och fÃ¶r att Ã¥terstÃ¤lla 
+* Watchdog-timern via WD_reset sÃ¥ lÃ¤nge matningsspÃ¤nning tillfÃ¶rs.
+* Om programmet fastnar i exekvering utanfÃ¶r mainloop sÃ¥ Ã¥terstÃ¤lls programmet.
 *
-* Resterande del av programmet är avbrottsgenererat.
+* Resterande del av programmet Ã¤r avbrottsgenererat.
 ******************************************************************************/
 int main(void)
 {	
