@@ -16,9 +16,9 @@
 
 
 // externa funktioner
-void WDT_set_timeout(const uint8_t timeout);
-void WDT_enable_system_reset(void);
-void WDT_disable_system_reset(void);
-void WDT_reset(void);
+void WD_initialize(const uint8_t timeout);
+void WD_enable_system_reset(void);
+void WD_disable_system_reset(void);
+void WD_reset(void);
 
 #endif /* WATCHDOG_H_ */

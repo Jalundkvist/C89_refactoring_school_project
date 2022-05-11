@@ -4,7 +4,6 @@
 static uint8_t Check_IO_port(uint8_t PIN);
 static void Display_on(Display* self, CurrentDisplay currentDisplay);
 static void Display_off(Display* self, CurrentDisplay currentDisplay);
-static void Display_enable(Display* self);
 static void Display_write(const uint8_t digit);
 static void Display_update_digit(Display* self, const uint8_t temp);
 static inline void write_MSB(const uint8_t digit);
@@ -26,6 +25,9 @@ static inline void write_MSB(const uint8_t digit);
 * Returnerar ett objekt av strukten Display som kan hantera visa ett heltal
 * mellan 00 till 99 på 7 segmentsdisplayer kopplade i bokstavsföljd från
 * PIN 2-8 och display 1 till angiven D1_pin och display 2 till D2_pin.
+*
+* Inparameter	: uint8_t Display 1 PIN & uint8_t Display 2 PIN.
+* Returnerar	: initialized objekt of struct Display.
 ******************************************************************************/
 Display new_Display(uint8_t D1_PIN, uint8_t D2_PIN)
 {
@@ -48,6 +50,9 @@ Display new_Display(uint8_t D1_PIN, uint8_t D2_PIN)
 * Funktionen Check_IO_port kontrollerar vilken PIN som displayen ligger på.
 * Om PIN ligger på PORTB, PIN 9-12 så aktiveras korrekt PIN i DDRD
 * annars så returneras PIN utan att något data direction register ettställs.
+*
+* Inparameter	: uint8_t PIN
+* Returnerar	: uint8_t PIN
 ******************************************************************************/
 static uint8_t Check_IO_port(uint8_t PIN)
 {	
@@ -64,6 +69,9 @@ static uint8_t Check_IO_port(uint8_t PIN)
 * Funktionen Display_on används för att tända en display. Ingående argument self
 * utgör en pekare till display-objektet i fråga och aktuell display. 
 * och tänder 
+*
+* Inparameter	: Object of struct Display, CurrentDisplay(DISPLAY1/DISPLAY2)
+* Returnerar	: --
 ******************************************************************************/
 void Display_on(Display* self, CurrentDisplay current_display)
 {
@@ -82,6 +90,9 @@ void Display_on(Display* self, CurrentDisplay current_display)
 * Funktionen Display_off används för att släcka en display. Ingående argument
 * self utgör en pekare till 7 segment displayen. Utefter aktuell I/O-port så 
 * nollställs motsvarande bit för port B.
+*
+* Inparameter	: Object of struct Display, CurrentDisplay(DISPLAY1/DISPLAY2)
+* Returnerar	: --
 ******************************************************************************/
 void Display_off(Display* self, CurrentDisplay current_display)
 {
@@ -108,6 +119,9 @@ void Display_off(Display* self, CurrentDisplay current_display)
 *
 * Typecasts till uint8_t används för att motverka varningsmeddelande för trunkering vid
 * bitvis skiftning.
+*
+* Inparameter	: uint8_t digit
+* Returnerar	: --
 *********************************************************************************************/
 static void Display_write(const uint8_t digit)
 {
@@ -172,8 +186,11 @@ static void Display_write(const uint8_t digit)
 
 /*********************************************************************************************
 * Funktionen write_MSB läser av ingående tal som i detta program är 7 bitars tal.
-* MSB läses av och lagras på variabeln number. PIN 8 aktiveras ifall number är ett tal, 
+* MSB[6:0] läses av och lagras på variabeln number. PIN 8 aktiveras ifall number är ett tal, 
 * annars avaktiveras PIN 8.
+*
+* Inparameter	: uint8_t digit.
+* Returnerar	: --
 *********************************************************************************************/
 static inline void write_MSB(const uint8_t digit)
 {
@@ -195,6 +212,9 @@ static inline void write_MSB(const uint8_t digit)
 * vilken display så skrivs första eller andra siffran ut till rätt display.
 *
 * Denna funktion anropas via avbrott genererat av timer.
+*
+* Inparameter	: Object of struct Display, uint8_t temp
+* Returnerar	: --
 *********************************************************************************************/
 static void Display_update_digit(Display* self, uint8_t temp)
 {

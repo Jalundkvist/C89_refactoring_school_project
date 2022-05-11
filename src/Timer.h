@@ -8,8 +8,8 @@
 * Makron för initiering av timerkretsat 0-2 med en prescaler på 64. 
 * Timer 1 som är en 16 bitars timer begränsas via OCR1A registret till att ha
 * samma uppräkning som timer 0 & 2.
-* Detta medför att avbrott genereras var 1.024 ms. Enligt följande uträkning
-* ((16M/64)^-1 * 256)
+* Detta medför att avbrott genereras var 1.024 ms. 
+* Enligt följande uträkning: ((16M/64)^-1 * 256).
 ******************************************************************************/
 #define INIT_TIMER0 TCCR0B = (1<<CS01)|(1<<CS00)
 #define INIT_TIMER1 TCCR1B = (1<<CS11)|(1<<CS10)|(1<<WGM12)

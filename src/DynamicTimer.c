@@ -17,8 +17,9 @@ static inline size_t check_capacity(const size_t capacity);
 * Funktionen new_Dynamictimer skapar och initierar ett objekt av strukten
 * DynamicTimer.
 *
-* Inparameter:	TimerSelection (TIMER0, TIMER1, TIMER2) & capacity, antal
-* element som går att lagra.
+* Inparameter:	TimerSelection (TIMER0, TIMER1, TIMER2) & capacity, 
+*				antal element som går att lagra.
+*
 * returnerar:	Initierat objekt av strukten DynamicTimer vilket även 
 *				innefattar en timer och vector av respektive struct.
 ******************************************************************************/

@@ -24,6 +24,10 @@ static void Button_disable_interrupt(struct Button* self);
 * pullup-resistor på tryckknappens PIN aktiveras via ettställning av 
 * motsvarande bit i aktuellt PORT-register, vilket medför att tryckknappens
 * insignal alltid är hög eller låg (0 eller 1).
+*
+*
+* Inparameter	: uint8_t PIN number.
+* Returnerar	: initialized objekt of struct Button.
 ******************************************************************************/
 Button new_Button(uint8_t PIN)
 {
@@ -54,6 +58,9 @@ Button new_Button(uint8_t PIN)
 * läses motsvarande PIN från registret PINB och returneras. Annars om 
 * tryckknappen är ansluten till I/O-port B, så läses motsvarande PIN från 
 * registret PIND och returneras. Annars vid fel så returneras false.
+*
+* Inparameter	: Object of struct Button.
+* Returnerar	: bool (true/false).
 ******************************************************************************/
 static bool Button_is_pressed(Button* self)
 {
@@ -84,6 +91,9 @@ static bool Button_is_pressed(Button* self)
 * att motsvarande PCI-avbrott aktiveras i maskregistret PCMSK2 (PIN Change
 * Mask Register 2). Slutligen sätts instansvariabeln interrupt_enabled till
 * true för att indikera att abrott nu är aktiverat.
+*
+* Inparameter	: Object of struct Button
+* Returnerar	: --
 ******************************************************************************/
 static void Button_enable_interrupt(Button* self)
 {
@@ -110,6 +120,9 @@ static void Button_enable_interrupt(Button* self)
 * en given PIN, där en tryckknapp är ansluten. Detta åstadkommes via
 * nollställning av motsvarande bit i någon av registren PCMSK0 (I/O-port B)
 * eller PCMSK2 (I/O-port D).
+*
+* Inparameter	: Object of struct Button
+* Returnerar	: --
 ******************************************************************************/
 static void Button_disable_interrupt(Button* self)
 {

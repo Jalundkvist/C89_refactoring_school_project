@@ -24,9 +24,9 @@
 #define F 0x0E
 
 /******************************************************************************
-* Strukten Display används för implementering av 7 segmentsdisplay, som bör
-* placeras på någon av digitala PINs 9 - 12 (PORTB) på Arduino Uno. 
-* Varje display kan tändas, släckas och togglas.
+* Strukten Display används för implementering av 2 st 7 segmentsdisplayer.
+* Dessa bör placeras på någon av digitala PINs 9 - 12 (PORTB) på Arduino Uno. 
+* Displayerna använder sig av arduino unos PIN 2-8
 ******************************************************************************/
 typedef struct Display
 {
@@ -37,7 +37,6 @@ typedef struct Display
 	CurrentDisplay currentDisplay;
 	void (*on)(struct Display*, CurrentDisplay);
 	void (*off)(struct Display*, CurrentDisplay);
-	void (*enable)(struct Display*);
 	void (*update_digit)(struct Display*, uint8_t temp);
 }Display;
 

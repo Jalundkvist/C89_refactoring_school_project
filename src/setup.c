@@ -26,9 +26,9 @@ void setup(void)
 	init_GPIO();
 	serial_print("Welcome to this temperature measurment program!\n");
 	serial_print("To initiate the dynamic measurment, please press the button on PIN 13.\n");
-	serial_print("The temperature will appear on the two seven segment displays\n");
-	WDT_set_timeout(_2S);
-	WDT_enable_system_reset();
+	serial_print("The temperature will appear on the two seven segment displays.\n");
+	WD_initialize(_2S);
+	WD_enable_system_reset();
 	
 	return; 
 } // End of function setup.

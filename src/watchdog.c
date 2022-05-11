@@ -1,58 +1,75 @@
-// Inkluderar eget bibliotek
+// Inkluderar egen headerfil.
 #include "watchdog.h"
 
 /*********************************************************************************************
-* Funktionen WDT_
+* Funktionen WD_initialize initierar Watchdog-timern och ställer in önskad timeout.
+* globalt avbrott inaktiveras inför initiering och aktiveras efter
 *
-* Inparameter	:
+* Inparameter	:timeout (Makron som _512MS, _1S, _2S, _4S)
 * Returnerar	: -- 
 *********************************************************************************************/
-void WDT_set_timeout(const uint8_t timeout)
+void WD_initialize(const uint8_t timeout)
 {
-	DISABLE_INTERRUPTS;
+	asm("CLI");
 	WDTCSR |= (1 << WDE) | (1 << WDCE);
 	WDTCSR = (1 << WDE) | (uint8_t)(timeout);
-	ENABLE_INTERRUPTS;
+	asm("SEI");
 	return;
 }
 
 /*********************************************************************************************
-* Funktionen WDT_
+* Funktionen WD_enable_system_reset aktiverar Watchdog-timern i System Reset Mode.
+* Detta medför en återställning av mikrodatorn om funktionen WD_reset kontinuerligt inom 
+* given tid som ställs in genom WD_initialize.
 *
-* Inparameter	:
+* Detta sker genom att anropa funktionen WD_reset följt av biten WDE 
+* (Watchdog System Reset Enable) ettställs i statusregistret WDTCSR
+* (Watchdog Timer Control and Status Register).
+*
+* Inparameter	: --
 * Returnerar	: --
 *********************************************************************************************/
-void WDT_enable_system_reset(void)
+void WD_enable_system_reset(void)
 {
-	WDT_reset();
-	WD_ENABLE_SYSTEM_RESET;
+	WD_reset();
+	WDTCSR |= (1 << WDE);
 	return;
 }
 
 /*********************************************************************************************
-* Funktionen WDT_
+* Funktionen WD_disable_system_reset inaktiverar Watchdog-timern från System Reset Mode.
 *
-* Inparameter	:
+* Detta sker genom att anropa funktionen WD_reset följt av biten WDE
+* (Watchdog System Reset Enable) nollställs i statusregistret WDTCSR
+* (Watchdog Timer Control and Status Register).
+*
+* Inparameter	: --
 * Returnerar	: --
 *********************************************************************************************/
-void WDT_disable_system_reset(void)
+void WD_disable_system_reset(void)
 {
-	WDT_reset();
-	WD_DISABLE_SYSTEM_RESET;
+	WD_reset();
+	WDTCSR &= ~(1 << WDE);
 	return;
 }
 
 /*********************************************************************************************
-* Funktionen WDT_
+* Funktionen WD_reset nollställer Watchdog-timern.
+* Globalt avbrott inaktiveras i början av funktionen och aktiveras igen efter de två 
+* instruktionerna har utförts.
 *
-* Inparameter	:
+* För återställning av timern så anropas assemblerinstruktionen WDR (Watchdog Reset).
+* Följt av att biten Watchdog reset flag - WDRF - nollställs i MCUSR 
+* (Microcontroll Unit Status Register).
+*
+* Inparameter	: --
 * Returnerar	: --
 *********************************************************************************************/
-void WDT_reset(void)
+void WD_reset(void)
 {
-	DISABLE_INTERRUPTS;
-	WD_RESET;
+	asm("CLI");
+	asm("WDR");
 	MCUSR &= ~(1 << WDRF);
-	ENABLE_INTERRUPTS;
+	asm("SEI");
 	return;
 }

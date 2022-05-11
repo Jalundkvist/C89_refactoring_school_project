@@ -12,6 +12,9 @@ static void init_ADC(void);
 * TempSensor. Ingående argument PIN utgör en pekare till aktuellt PIN-nummer. 
 * Först skapas ett objekt av structen TempSensor döpt self. Därefter initieras
 * objektets instansvariabler, följt av att det initierade objektet returneras.
+*
+* Inparameter	: uint8_t PIN.
+* Returnerar	: initialized objekt of TempSensor.
 ******************************************************************************/
 TempSensor new_TempSensor(uint8_t PIN)
 {
@@ -42,6 +45,9 @@ TempSensor new_TempSensor(uint8_t PIN)
 * Slutligen transmitteras den beräknade temperaturen till vår PC via anrop av
 * funktionen serial_print_integer, som möjliggör sammansättning av text och 
 * heltal samt seriell överföring. Därmed transmitteras textstycktet.
+*
+* Inparameter	: --
+* Returnerar	: --
 ******************************************************************************/
 static void print_temperature(TempSensor* self)
 {
@@ -64,6 +70,9 @@ static void print_temperature(TempSensor* self)
 * via AD-omvandlarens interrupt-flagga ADIF (ADC Interrupt Flag), som då blir
 * ettställd. För att sedan återställa ADIF inför nästa AD-omvandlaren så 
 * ettställs denna, följt av att avläst resultat returneras vid återhoppet.
+*
+* Inparameter	: Object of struct TempSensor.
+* Returnerar	: uint16_t.
  ******************************************************************************/
 static uint16_t ADC_read(TempSensor* self)
 {
@@ -78,8 +87,8 @@ static uint16_t ADC_read(TempSensor* self)
 * Funktionen init_ADC används för att initiera AD-omvandlaren då första
 * AD-omvandlingen kan vara felaktig.
 * 
-* Inparameter: Ingen - void.
-* Returvärde: Ingen.
+* Inparameter	: --
+* Returnerar	: --
  ******************************************************************************/
 static void init_ADC(void)
 {
