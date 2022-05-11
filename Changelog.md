@@ -1,11 +1,12 @@
 # Projekt-1-ELA21
 Inlämningsuppgift för inbyggda system 1.
 
-    Dokumentation av ändringar i projektet
+Dokumentation av ändringar i projektet
 
 1. Updated toolchain from GNU C89 -> C99.
 
-		Serial file changes 
+Serial file changes 
+
 2.Troubleshooting serial functions. 
   2.1 Baudrate set to 115220 KBPS, should be 9600 KBPS. - Fixed.
   2.1.2 F_CPU typo -> Was 160Mhz, updated to 16Mhz.
@@ -90,5 +91,15 @@ Inlämningsuppgift för inbyggda system 1.
 9. Added Vector struct
 	9.1 Made vector struct use function pointers.
 
-10. Added ...
+10. Added DynamicTimer struct
+	10.1 DynamicTimer uses Timer and Vector struct
+	10.2 Updated interrupts and setup file to use DynamicTimer for timer1.
+	10.3 Timing for temperature reading now updates dynamically depending on the average time between actuations of button on PIN 13.
+	
+11. Added struct for 7-segment displays.
+	11.1 Displays uses PIN 2-8 for the segments and PIN 10-11 for displays.
+
+12. Implemented Watchdog-timer
+	12.1 Watchdogtimer now working and uses a 2S timer before it timeouts.
+	12.2 WDT works as intended and resets in projects main-loop
 		
