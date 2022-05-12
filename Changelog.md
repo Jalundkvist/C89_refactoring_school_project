@@ -29,8 +29,8 @@ Serial file changes
 	
 	2.7 Check if pointers is necessary in serial, if not. - remove unecessary pointers.
   	2.7.1 write_byte no longer uses pointer. Uses one bit of data/send
-    2.7.2 Macro update -> CARRIAGE_RETURN & END_TRANSMISSION
-    2.7.3 Removed pointers from print_integer and print_unsigned. 
+    	2.7.2 Macro update -> CARRIAGE_RETURN & END_TRANSMISSION
+    	2.7.3 Removed pointers from print_integer and print_unsigned. 
           updated long & unsigned long to int32_t & uint32_t.
     
 		
@@ -63,11 +63,11 @@ Serial file changes
 		
 6. Troubleshooting Button struct.
 
-		5.1 Updated struct
-		5.2 Void functions made static and struct uses function pointers instead.
-		5.3 removed pointers "self"
-		5.4 BIT-macro removed
-		5.5 subtract 8 from PIN if PIN is between 8-13 (PORTB).
+		6.1 Updated struct
+		6.2 Void functions made static and struct uses function pointers instead.
+		6.3 removed pointers "self"
+		6.4 BIT-macro removed
+		6.5 subtract 8 from PIN if PIN is between 8-13 (PORTB).
 
 		Buttons now working.
 
