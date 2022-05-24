@@ -53,9 +53,12 @@ För ändringar som har utförts från originalkoden som var skriven i C89, se -
  
 ## Diskussion
 
-Ett intressant skolprojekt som framhäver ens egna preferenser angående utforming av kod. Projektet gav även en större insikt i hur kod som är tillämpad enligt C89 kan se ut och hur man kan anpassa den till den något mer moderna C99. 
-I slutet av detta projekt så har man fått en bättre felsökningsmetod och man känner sig mer bekväm med att felsöka C-kod.
+Ett intressant skolprojekt som framhäver ens egna preferenser angående utforming av kod. 
+Hela projektet kändes något överväldigande först då det var väldigt mycket fel att åtgärda. 
+Trots detta så var implementering av en dynamisk timer den mest komplicerade delen där flera struktar ingick, vilket i sig var väldigt lärorikt.
 
-Projektet kändes något överväldigande först då det var väldigt mycket fel att åtgärda.
+Projektet gav en större insikt i hur kod som är tillämpad enligt C89 kan se ut och hur man kan anpassa den till den något mer moderna C99. 
+I slutet av detta projekt så har man fått en bättre felsökningsmetod och man känner sig mer bekväm med att felsöka C-kod, användandet av struktar och pekare.
 
---- MORE TO COME- --
+*Saker jag hade velat förstå bättre efter utförd projekt/kurs:*
+Arrays & vectors
