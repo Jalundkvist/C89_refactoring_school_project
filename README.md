@@ -3,7 +3,7 @@ Inlämningsuppgift för inbyggda system 1.
 
 För ändringar som har utförts från originalkoden som var skriven i C89, se -> changelog.md
 
-				                      Skolprojekt
+## Skolprojekt
  Felsök och uppdatera en befintlig C-kod från C89 till C99 och optimera
  koden.
 
@@ -43,9 +43,19 @@ För ändringar som har utförts från originalkoden som var skriven i C89, se -
 
  *****************************************************************************
  
-			 PINS USED ON ARDUINO UNO
+ ##                      PINS USED ON ARDUINO UNO
 			 PIN 2-8 for 7seg segments
 			 PIN 10  for first  digit
 			 PIN 11  for second digit
 			 PIN 13  for button
 			 PIN A1  for tmp36 sensor
+ *****************************************************************************
+ 
+## Diskussion
+
+Ett intressant skolprojekt som framhäver ens egna preferenser angående utforming av kod. Projektet gav även en större insikt i hur kod som är tillämpad enligt C89 kan se ut och hur man kan anpassa den till den något mer moderna C99. 
+I slutet av detta projekt så har man fått en bättre felsökningsmetod och man känner sig mer bekväm med att felsöka C-kod.
+
+Projektet kändes något överväldigande först då det var väldigt mycket fel att åtgärda.
+
+--- MORE TO COME- --
