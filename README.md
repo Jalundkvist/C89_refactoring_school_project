@@ -1,5 +1,5 @@
-# Projekt-1-ELA21
-Inlämningsuppgift för inbyggda system 1.
+# C89 to C99 refactoring school project (Swe)
+Inlämningsuppgift för inbyggda system 1, Yrgo Göteborg.
 
 För ändringar som har utförts från originalkoden som var skriven i C89, se -> changelog.md
 
